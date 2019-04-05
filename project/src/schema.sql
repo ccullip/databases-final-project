@@ -3,7 +3,7 @@ USE Records;
 
 CREATE TABLE Patient (
 patient_id INT NOT NULL,
-race VARCHAR(30), -- change to ENUM
+race ENUM("?", "AfricanAmerican", "Asian", "Caucasian", "Hispanic", "Other"),
 gender ENUM("Male", "Female", "Other"),
 payer_code ENUM("?", "BC", "CH", "CM","CP", "DM", "FR", "HM", "MC", "MD", "MP", "OG", "OT", "PO", "SI", "SP", "UN", "WC"),
 PRIMARY KEY (patient_id)
@@ -11,11 +11,12 @@ PRIMARY KEY (patient_id)
 
 CREATE TABLE Encounter (
 encounter_id INT NOT NULL,
-num_procedure INT,
-admiss_type INT,
-duration TINYINT, --num_days in hospital
-age ENUM("[0-10]", "[10-20]", "[20-30]", "[30-40]", "[40-50]", "[50-60]", "[60-70]", "[70-80]", "[80-90]", "[90-100]"),
-readmitted ENUM,
+num_lab_procedures TINYINT,
+num_medications TINYINT,
+admiss_type TINYINT,
+duration TINYINT, --num_days in hospital (0-14)
+age ENUM("[0-10)", "[10-20)", "[20-30)", "[30-40)", "[40-50)", "[50-60)", "[60-70)", "[70-80)", "[80-90)", "[90-100)"),
+readmitted ENUM(">30", "<30", "NO"),
 PRIMARY KEY (encounter_id)
 );
 
@@ -40,8 +41,8 @@ FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id)
 
 CREATE TABLE Vitals (
 ecounter_id INT NOT NULL,
-a1c_result ENUM(), -- > 7 > 8 None, norm
-glucose_result ,
+a1c_result ENUM(">7", ">8", "None", "Norm"),
+glucose_result ENUM(">200", ">300", "None", "Norm"),
 PRIMARY KEY (encounter_id),
 FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id)
 );

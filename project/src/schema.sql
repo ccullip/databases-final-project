@@ -11,7 +11,7 @@ PRIMARY KEY (patient_id)
 
 CREATE TABLE Encounter (
 encounter_id INT NOT NULL,
-num_lab_procedures TINYINT,
+num_lab_procedures SMALLINT, -- had to change tinyint to smallint because numbers exist in the dataset that exceed 128.
 num_medications TINYINT,
 admiss_type TINYINT,
 duration TINYINT, --num_days in hospital (0-14)

@@ -40,7 +40,7 @@ FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id)
 );
 
 CREATE TABLE Vitals (
-ecounter_id INT NOT NULL,
+encounter_id INT NOT NULL,
 a1c_result ENUM(">7", ">8", "None", "Norm"),
 glucose_result ENUM(">200", ">300", "None", "Norm"),
 PRIMARY KEY (encounter_id),
@@ -53,7 +53,7 @@ PRIMARY KEY (med_name)
 );
 
 CREATE TABLE Diagnosis (
-icd_code DECIMAL(4,2) NOT NULL,
+icd_code DECIMAL(10,2) NOT NULL,
 diag_name VARCHAR (300),
 PRIMARY KEY (icd_code)
 );
@@ -68,7 +68,7 @@ FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id)
 
 CREATE TABLE GetsPatientFrom (
 encounter_id INT NOT NULL,
-source_id TINYINT NOT NULL,
+source_id INT NOT NULL,
 PRIMARY KEY (encounter_id),
 FOREIGN KEY (source_id) REFERENCES Source(source_id),
 FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id)
@@ -84,20 +84,19 @@ FOREIGN KEY (discharge_id) REFERENCES Discharge(discharge_id)
 
 CREATE TABLE Diagnoses (
 encounter_id INT NOT NULL,
-icd_code DECIMAL (4, 2) NOT NULL,
-priority TINYINT
+icd_code DECIMAL (10, 2) NOT NULL,
+priority TINYINT,
 PRIMARY KEY (encounter_id, icd_code),
 FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id),
-FOREIGN KEY (icd_code) REFERENCES Diagnosis(diag_name)
+FOREIGN KEY (icd_code) REFERENCES Diagnosis(icd_code)
 );
 
 CREATE TABLE Prescribes (
 encounter_id INT NOT NULL,
 med_name VARCHAR (50) NOT NULL,
 dosage_change ENUM("Up", "Down", "Steady", "No"),
-PRIVATE KEY (encounter_id, med_name),
+PRIMARY KEY (encounter_id, med_name),
 FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id),
 FOREIGN KEY (med_name) REFERENCES Medication(med_name)
-
-)
+);
 

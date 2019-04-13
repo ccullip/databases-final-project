@@ -4,26 +4,27 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.math.BigDecimal;
 
 public class Insert {
 
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String TIMEZONE_THING = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String DB = "admin_portal";
-    private static final String DB_URL = "jdbc:mysql://localhost/" + DB + TIMEZONE_THING;
+    private static final String DB_URL = "jdbc:mysql://localhost/" + DB; //+ TIMEZONE_THING;
     private static final String USER = "root";
-    private static final String PASSWORD = "password123";
+    private static final String PASSWORD = "";
 
     public static void main(String[] args) {
 
         Connection conn = createConnection();
-        insertEntities(conn, "dataset.csv");
+        insertEntities(conn, "../../dataset.csv");
     }
 
     private static void insertEntities(Connection conn, String file) {
         List<List<String>> records = readCSV(file);
+        List<String> header = getHeader(file);
         for (List<String> record : records) {
-
             // patient attributes
             int patient_id = Integer.parseInt(record.get(1));
             String race = record.get(2);
@@ -44,13 +45,42 @@ public class Insert {
             // encounter attributes
             int encounter_id = Integer.parseInt(record.get(0));
             int lab_procedures = Integer.parseInt(record.get(11));
-            int medications = Integer.parseInt(record.get(12));
+            int medications = Integer.parseInt(record.get(13));
             int admiss_type = Integer.parseInt(record.get(5));
             int duration = Integer.parseInt(record.get(8));
             String age = record.get(4);
             String readmitted = record.get(47);
 
             addEncounter(conn, encounter_id, lab_procedures, medications, admiss_type, duration, age, readmitted);
+
+            // patient has encounter relationship
+            addHas(conn, encounter_id, patient_id);
+
+            // gets patient from relationship
+            int source_id = Integer.parseInt(record.get(7));
+            addGetsPatientFrom(conn, encounter_id, source_id);
+
+            // sends patient to relationship
+            int discharge_id = Integer.parseInt(record.get(6));
+            addSendsPatientTo(conn, encounter_id, discharge_id);
+
+            // prescribes relationship
+            for (int i = 0; i < 23; i++){
+                String med_name = header.get(23 + i);
+                String dosage_change = record.get(23 + i);
+                if (!dosage_change.equals("No")){
+                    addPrescribes(conn, encounter_id, med_name, dosage_change);
+                }
+            }
+
+            // diagnoses relationship
+            for (int i = 1; i < 4; i++){
+                String icd = record.get(16 + i);
+                if (!icd.equals("?")){
+                    BigDecimal icd_code = new BigDecimal(icd);
+                    addDiagnoses(conn, encounter_id, icd_code, i);
+                }
+            }
 
         }
     }
@@ -110,6 +140,83 @@ public class Insert {
             e.printStackTrace();
         }
     }
+    private static void addHas(Connection conn, int enc_id, int pat_id){
+        PreparedStatement ps;
+        try {
+            String insertHas = "Insert INTO has" +
+                    "(encounter_id, pat_id)" +
+                    "values (?,?)";
+            ps = conn.prepareStatement(insertHas);
+            ps.setInt(1, enc_id);
+            ps.setInt(2, pat_id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void addGetsPatientFrom(Connection conn, int id, int source_id){
+        PreparedStatement ps;
+        try {
+            String insertGetsPatientFrom = "Insert INTO getspatientfrom" +
+                    "(encounter_id, source_id)" +
+                    "values (?,?)";
+            ps = conn.prepareStatement(insertGetsPatientFrom);
+            ps.setInt(1, id);
+            ps.setInt(2, source_id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void addSendsPatientTo(Connection conn, int id, int discharge_id){
+        PreparedStatement ps;
+        try {
+            String insertSendsPatientTo = "Insert INTO sendspatientto" +
+                    "(encounter_id, discharge_id)" +
+                    "values (?,?)";
+            ps = conn.prepareStatement(insertSendsPatientTo);
+            ps.setInt(1, id);
+            ps.setInt(2, discharge_id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void addPrescribes(Connection conn, int id, String med_name, String dosage_change){
+        PreparedStatement ps;
+        try {
+            String insertPrescribes = "Insert INTO prescribes" +
+                    "(encounter_id, med_name, dosage_change)" +
+                    "values (?,?,?)";
+            ps = conn.prepareStatement(insertPrescribes);
+            ps.setInt(1, id);
+            ps.setString(2, med_name);
+            ps.setString(3, dosage_change);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void addDiagnoses(Connection conn, int id, BigDecimal icd_code, int priority){
+        PreparedStatement ps;
+        try {
+            String insertDiagnoses = "Insert INTO diagnoses" +
+                    "(encounter_id, icd_code, priority)" +
+                    "values (?,?,?)";
+            ps = conn.prepareStatement(insertDiagnoses);
+            ps.setInt(1, id);
+            ps.setBigDecimal(2, icd_code);
+            ps.setInt(3, priority);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     private static Connection createConnection() {
         Connection conn;
         try {
@@ -137,6 +244,18 @@ public class Insert {
         }
         return records;
     }
+    private static List<String> getHeader(String file){
+        List<String> header = new ArrayList<String>();
+        try {
+            Scanner scan = new Scanner(new File(file));
+            String headerStr = scan.nextLine();
+            header = getRecordFromLine(headerStr);
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        return header;
+    }
+
     private static List<String> getRecordFromLine(String line) {
         List<String> values = new ArrayList<String>();
         Scanner rowScanner = new Scanner(line);

@@ -28,7 +28,7 @@ PRIMARY KEY (source_id)
 
 CREATE TABLE Discharge (
 discharge_id INT NOT NULL,
-discharge_name VARCHAR (100),
+discharge_name VARCHAR (125),
 PRIMARY KEY (discharge_id)
 );
 

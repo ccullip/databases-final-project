@@ -1,35 +1,61 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.math.BigDecimal;
+import java.util.*;
 
 public class Insert {
 
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String TIMEZONE_THING = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String DB = "admin_portal";
-    private static final String DB_URL = "jdbc:mysql://localhost/" + DB; //+ TIMEZONE_THING;
+    private static final String DB_URL = "jdbc:mysql://localhost/" + DB + TIMEZONE_THING;
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "password123";
+
+    static Map<Integer, String> admissionTypeMap = new HashMap<>();
 
     public static void main(String[] args) {
 
         Connection conn = createConnection();
-        insertEntities(conn, "../../dataset.csv");
-    }
+        /*
+         insertBasicEntities(conn, "important_mappings.csv");
+         insertICDCodes(conn, "icd9codes.csv");
+         insertMeds(conn, "dataset.csv");
+         */
 
+        insertEntities(conn, "dataset.csv");
+    }
+    private static void insertBasicEntities(Connection conn, String file) {
+        List<List<String>> mappings = readCSV(file);
+        for(int i = 0; i < mappings.size(); i++) {
+            if(i < 8) {
+                admissionTypeMap.put(Integer.parseInt(mappings.get(i).get(0)),  mappings.get(i).get(1));
+            } else if(i > 8 && i < 39) {
+                // discharge name too long
+                addDischarge(conn, Integer.parseInt(mappings.get(i).get(0)), mappings.get(i).get(1));
+            } else if(i > 39 && i < 66) {
+                addSource(conn, Integer.parseInt(mappings.get(i).get(0)), mappings.get(i).get(1));
+            }
+        }
+    }
+    private static void insertICDCodes(Connection conn, String file) {
+        List<List<String>> icdCodes = readCSV(file);
+        System.out.println(icdCodes.size());
+        for(int i = 1; i < icdCodes.size(); i++) {
+            System.out.println(icdCodes.get(i).toString());
+            addDiagnosis(conn, icdCodes.get(i).get(0), icdCodes.get(i).get(1));
+        }
+    }
+    private static void insertMeds(Connection conn, String file) {
+        List<String> header = getHeader(file);
+        for(int i = 22; i < header.size() - 3; i++) {
+            addMedication(conn, header.get(i));
+        }
+    }
     private static void insertEntities(Connection conn, String file) {
         List<List<String>> records = readCSV(file);
         List<String> header = getHeader(file);
         for (List<String> record : records) {
-            // patient attributes
-            int patient_id = Integer.parseInt(record.get(1));
-            String race = record.get(2);
-            String gender = record.get(3);
-            String payer_code = record.get(9);
 
             /*
             We first must check if the current patient_id has
@@ -37,12 +63,15 @@ public class Insert {
             file only has unique Encounter entities.
             */
 
+
+            int patient_id = Integer.parseInt(record.get(1));
+            String race = record.get(2);
+            String gender = record.get(3);
+            String payer_code = record.get(9);
             boolean exists = isPatientAlreadyInDB(conn, patient_id);
             if (!exists) {
                 addPatient(conn, patient_id, race, gender, payer_code);
             }
-
-            // encounter attributes
             int encounter_id = Integer.parseInt(record.get(0));
             int lab_procedures = Integer.parseInt(record.get(11));
             int medications = Integer.parseInt(record.get(13));
@@ -50,38 +79,34 @@ public class Insert {
             int duration = Integer.parseInt(record.get(8));
             String age = record.get(4);
             String readmitted = record.get(47);
-
-            addEncounter(conn, encounter_id, lab_procedures, medications, admiss_type, duration, age, readmitted);
-
-            // patient has encounter relationship
-            addHas(conn, encounter_id, patient_id);
-
-            // gets patient from relationship
-            int source_id = Integer.parseInt(record.get(7));
-            addGetsPatientFrom(conn, encounter_id, source_id);
-
-            // sends patient to relationship
             int discharge_id = Integer.parseInt(record.get(6));
+            int source_id = Integer.parseInt(record.get(7));
+            addEncounter(conn, encounter_id, lab_procedures, medications, admiss_type, duration, age, readmitted);
+            addHas(conn, encounter_id, patient_id);
+            addGetsPatientFrom(conn, encounter_id, source_id);
             addSendsPatientTo(conn, encounter_id, discharge_id);
 
-            // prescribes relationship
-            for (int i = 0; i < 23; i++){
-                String med_name = header.get(23 + i);
-                String dosage_change = record.get(23 + i);
-                if (!dosage_change.equals("No")){
-                    addPrescribes(conn, encounter_id, med_name, dosage_change);
+            String change = record.get(45);
+
+            if (!change.equals("No")) {
+                for(int i = 22; i < header.size() - 3; i++) {
+                    String med_change = record.get(i);
+                    if (!med_change.equals("No")) {
+                        String med_name = header.get(i);
+                        addPrescribes(conn, encounter_id, med_name, med_change);
+                    }
                 }
             }
 
-            // diagnoses relationship
-            for (int i = 1; i < 4; i++){
+            // diagnoses doesn't work completely because the icd_codes don't match all the way
+            // i.e. V08 vs V08. , 584 vs. 584.0, and other things. :(
+            //
+            for(int i = 1; i < 4; i++) {
                 String icd = record.get(16 + i);
-                if (!icd.equals("?")){
-                    BigDecimal icd_code = new BigDecimal(icd);
-                    addDiagnoses(conn, encounter_id, icd_code, i);
+                if (!icd.equals("?")) {
+                    addDiagnoses(conn, encounter_id, icd, i);
                 }
             }
-
         }
     }
     private static boolean isPatientAlreadyInDB(Connection conn, int id) {
@@ -101,6 +126,36 @@ public class Insert {
             e.printStackTrace();
         }
         return exists;
+    }
+    private static void addSource(Connection conn, int source_id, String source_name) {
+        PreparedStatement ps;
+        String insertPatient = "Insert INTO Source" +
+                "(source_id, source_name)" +
+                "values (?,?)";
+        try {
+            ps = conn.prepareStatement(insertPatient);
+            ps.setInt(1, source_id);
+            ps.setString(2, source_name);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void addDischarge(Connection conn, int discharge_id, String discharge_name) {
+        PreparedStatement ps;
+        String insertPatient = "Insert INTO Discharge" +
+                "(discharge_id, discharge_name)" +
+                "values (?,?)";
+        try {
+            ps = conn.prepareStatement(insertPatient);
+            ps.setInt(1, discharge_id);
+            ps.setString(2, discharge_name);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     private static void addPatient(Connection conn, int id, String race, String gender, String code) {
         PreparedStatement ps;
@@ -144,7 +199,7 @@ public class Insert {
         PreparedStatement ps;
         try {
             String insertHas = "Insert INTO has" +
-                    "(encounter_id, pat_id)" +
+                    "(encounter_id, patient_id)" +
                     "values (?,?)";
             ps = conn.prepareStatement(insertHas);
             ps.setInt(1, enc_id);
@@ -158,7 +213,7 @@ public class Insert {
     private static void addGetsPatientFrom(Connection conn, int id, int source_id){
         PreparedStatement ps;
         try {
-            String insertGetsPatientFrom = "Insert INTO getspatientfrom" +
+            String insertGetsPatientFrom = "Insert INTO GetsPatientFrom" +
                     "(encounter_id, source_id)" +
                     "values (?,?)";
             ps = conn.prepareStatement(insertGetsPatientFrom);
@@ -185,10 +240,24 @@ public class Insert {
             e.printStackTrace();
         }
     }
+    private static void addMedication(Connection conn, String med_name) {
+        PreparedStatement ps;
+        try {
+            String insertMedication = "Insert INTO Medication" +
+                    "(med_name)" +
+                    "values (?)";
+            ps = conn.prepareStatement(insertMedication);
+            ps.setString(1, med_name);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     private static void addPrescribes(Connection conn, int id, String med_name, String dosage_change){
         PreparedStatement ps;
         try {
-            String insertPrescribes = "Insert INTO prescribes" +
+            String insertPrescribes = "Insert INTO Prescribes" +
                     "(encounter_id, med_name, dosage_change)" +
                     "values (?,?,?)";
             ps = conn.prepareStatement(insertPrescribes);
@@ -201,16 +270,32 @@ public class Insert {
             e.printStackTrace();
         }
     }
-    private static void addDiagnoses(Connection conn, int id, BigDecimal icd_code, int priority){
+    private static void addDiagnoses(Connection conn, int id, String icd_code, int priority){
         PreparedStatement ps;
         try {
-            String insertDiagnoses = "Insert INTO diagnoses" +
+            String insertDiagnoses = "Insert INTO Diagnoses" +
                     "(encounter_id, icd_code, priority)" +
                     "values (?,?,?)";
             ps = conn.prepareStatement(insertDiagnoses);
             ps.setInt(1, id);
-            ps.setBigDecimal(2, icd_code);
+            System.out.println(icd_code);
+            ps.setString(2, icd_code);
             ps.setInt(3, priority);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void addDiagnosis(Connection conn, String code, String description) {
+        PreparedStatement ps;
+        try {
+            String insertDiagnoses = "Insert INTO Diagnosis" +
+                    "(icd_code, diag_name)" +
+                    "values (?,?)";
+            ps = conn.prepareStatement(insertDiagnoses);
+            ps.setString(1, code);
+            ps.setString(2, description);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -255,7 +340,6 @@ public class Insert {
         }
         return header;
     }
-
     private static List<String> getRecordFromLine(String line) {
         List<String> values = new ArrayList<String>();
         Scanner rowScanner = new Scanner(line);

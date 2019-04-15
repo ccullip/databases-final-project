@@ -17,12 +17,9 @@ public class Insert {
     public static void main(String[] args) {
 
         Connection conn = createConnection();
-        /*
-         insertBasicEntities(conn, "important_mappings.csv");
-         insertICDCodes(conn, "icd9codes.csv");
-         insertMeds(conn, "dataset.csv");
-         */
-
+        insertBasicEntities(conn, "important_mappings.csv");
+        insertICDCodes(conn, "icd9codes.csv");
+        insertMeds(conn, "dataset.csv");
         insertEntities(conn, "dataset.csv");
     }
     private static void insertBasicEntities(Connection conn, String file) {
@@ -40,11 +37,22 @@ public class Insert {
     }
     private static void insertICDCodes(Connection conn, String file) {
         List<List<String>> icdCodes = readCSV(file);
-        System.out.println(icdCodes.size());
         for(int i = 1; i < icdCodes.size(); i++) {
-            System.out.println(icdCodes.get(i).toString());
-            addDiagnosis(conn, icdCodes.get(i).get(0), icdCodes.get(i).get(1));
+            String code = cleanUpICDCode(icdCodes.get(i).get(0));
+            addDiagnosis(conn, code, icdCodes.get(i).get(1));
         }
+    }
+    private static String cleanUpICDCode(String original) {
+        double num;
+        String code;
+        try {
+            num = Double.parseDouble(original);
+            code = Double.toString(num);
+        } catch(NumberFormatException e) {
+            num = Double.parseDouble(original.substring(1));
+            code = original.charAt(0) + Double.toString(num);
+        }
+        return code;
     }
     private static void insertMeds(Connection conn, String file) {
         List<String> header = getHeader(file);
@@ -57,21 +65,16 @@ public class Insert {
         List<String> header = getHeader(file);
         for (List<String> record : records) {
 
-            /*
-            We first must check if the current patient_id has
-            not already been added into the database table. Our CSV
-            file only has unique Encounter entities.
-            */
-
-
             int patient_id = Integer.parseInt(record.get(1));
             String race = record.get(2);
             String gender = record.get(3);
             String payer_code = record.get(9);
+
             boolean exists = isPatientAlreadyInDB(conn, patient_id);
             if (!exists) {
                 addPatient(conn, patient_id, race, gender, payer_code);
             }
+
             int encounter_id = Integer.parseInt(record.get(0));
             int lab_procedures = Integer.parseInt(record.get(11));
             int medications = Integer.parseInt(record.get(13));
@@ -81,6 +84,7 @@ public class Insert {
             String readmitted = record.get(47);
             int discharge_id = Integer.parseInt(record.get(6));
             int source_id = Integer.parseInt(record.get(7));
+
             addEncounter(conn, encounter_id, lab_procedures, medications, admiss_type, duration, age, readmitted);
             addHas(conn, encounter_id, patient_id);
             addGetsPatientFrom(conn, encounter_id, source_id);
@@ -98,12 +102,10 @@ public class Insert {
                 }
             }
 
-            // diagnoses doesn't work completely because the icd_codes don't match all the way
-            // i.e. V08 vs V08. , 584 vs. 584.0, and other things. :(
-            //
             for(int i = 1; i < 4; i++) {
-                String icd = record.get(16 + i);
-                if (!icd.equals("?")) {
+                String original = record.get(16 + i);
+                if (!original.equals("?")) {
+                    String icd = cleanUpICDCode(original);
                     addDiagnoses(conn, encounter_id, icd, i);
                 }
             }
@@ -284,7 +286,13 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Cannot add or update a child row")) {
+                System.out.println("This code does not exist in the ICD 9 Code csv we found online :/");
+            } else if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate, just ignore");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addDiagnosis(Connection conn, String code, String description) {

@@ -53,7 +53,7 @@ PRIMARY KEY (med_name)
 );
 
 CREATE TABLE Diagnosis (
-icd_code DECIMAL(10,2) NOT NULL,
+icd_code VARCHAR(10) NOT NULL,
 diag_name VARCHAR (300),
 PRIMARY KEY (icd_code)
 );
@@ -84,7 +84,7 @@ FOREIGN KEY (discharge_id) REFERENCES Discharge(discharge_id)
 
 CREATE TABLE Diagnoses (
 encounter_id INT NOT NULL,
-icd_code DECIMAL (10, 2) NOT NULL,
+icd_code VARCHAR(10) NOT NULL,
 priority TINYINT,
 PRIMARY KEY (encounter_id, icd_code),
 FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id),

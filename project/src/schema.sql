@@ -1,40 +1,40 @@
-CREATE DATABASE Records;
-USE Records;
+CREATE DATABASE admin_portal;
+USE admin_portal;
 
 CREATE TABLE Patient (
 patient_id INT NOT NULL,
-race ENUM("?", "AfricanAmerican", "Asian", "Caucasian", "Hispanic", "Other"),
+race ENUM("?", "AfricanAmerican", "Asian", "Caucasian", "Hispanic", "Other") DEFAULT "?",
 gender ENUM("Male", "Female", "Other"),
-payer_code ENUM("?", "BC", "CH", "CM","CP", "DM", "FR", "HM", "MC", "MD", "MP", "OG", "OT", "PO", "SI", "SP", "UN", "WC"),
+payer_code ENUM("?", "BC", "CH", "CM","CP", "DM", "FR", "HM", "MC", "MD", "MP", "OG", "OT", "PO", "SI", "SP", "UN", "WC") DEFAULT "?",
 PRIMARY KEY (patient_id)
 );
 
 CREATE TABLE Encounter (
 encounter_id INT NOT NULL,
-num_lab_procedures SMALLINT, -- had to change tinyint to smallint because numbers exist in the dataset that exceed 128.
+num_lab_procedures SMALLINT,
 num_medications TINYINT,
-admiss_type TINYINT,
-duration TINYINT, --num_days in hospital (0-14)
+admiss_type TINYINT DEFAULT 6,
+duration TINYINT,
 age ENUM("[0-10)", "[10-20)", "[20-30)", "[30-40)", "[40-50)", "[50-60)", "[60-70)", "[70-80)", "[80-90)", "[90-100)"),
 readmitted ENUM(">30", "<30", "NO"),
 PRIMARY KEY (encounter_id)
 );
 
 CREATE TABLE Source (
-source_id INT NOT NULL,
+source_id INT NOT NULL DEFAULT 17,
 source_name VARCHAR (100),
 PRIMARY KEY (source_id)
 );
 
 CREATE TABLE Discharge (
-discharge_id INT NOT NULL,
+discharge_id INT NOT NULL DEFAULT 18,
 discharge_name VARCHAR (125),
 PRIMARY KEY (discharge_id)
 );
 
 CREATE TABLE Physician (
 encounter_id INT NOT NULL,
-specialty VARCHAR (100),
+specialty VARCHAR (100) DEFAULT "?",
 PRIMARY KEY (encounter_id),
 FOREIGN KEY (encounter_id) REFERENCES Encounter(encounter_id)
 );

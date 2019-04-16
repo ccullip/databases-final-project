@@ -10,17 +10,29 @@ public class Insert {
     private static final String DB = "admin_portal";
     private static final String DB_URL = "jdbc:mysql://localhost/" + DB + TIMEZONE_THING;
     private static final String USER = "root";
-    private static final String PASSWORD = "password123";
+    private static final String PASSWORD = "";
+
+    private static final Boolean isCharlotte = false;    // change this if not Charlotte!
 
     static Map<Integer, String> admissionTypeMap = new HashMap<>();
 
     public static void main(String[] args) {
 
         Connection conn = createConnection();
-        insertBasicEntities(conn, "important_mappings.csv");
-        insertICDCodes(conn, "icd9codes.csv");
-        insertMeds(conn, "dataset.csv");
-        insertEntities(conn, "dataset.csv");
+
+        // account for my weird file structure/idk why it's not finding the files unless i add ../../
+        if (isCharlotte){
+            insertBasicEntities(conn, "../../important_mappings.csv");
+            insertICDCodes(conn, "../../icd9codes.csv");
+            insertMeds(conn, "../../dataset.csv");
+            insertEntities(conn, "../../dataset.csv");
+        } else {
+            insertBasicEntities(conn, "important_mappings.csv");
+            insertICDCodes(conn, "icd9codes.csv");
+            insertMeds(conn, "dataset.csv");
+            insertEntities(conn, "dataset.csv");
+        }
+
     }
     private static void insertBasicEntities(Connection conn, String file) {
         List<List<String>> mappings = readCSV(file);
@@ -84,11 +96,16 @@ public class Insert {
             String readmitted = record.get(47);
             int discharge_id = Integer.parseInt(record.get(6));
             int source_id = Integer.parseInt(record.get(7));
+            String a1c_result = record.get(21);
+            String glucose_result = record.get(20);
+            String specialty = record.get(10);
 
             addEncounter(conn, encounter_id, lab_procedures, medications, admiss_type, duration, age, readmitted);
             addHas(conn, encounter_id, patient_id);
             addGetsPatientFrom(conn, encounter_id, source_id);
             addSendsPatientTo(conn, encounter_id, discharge_id);
+            addVitals(conn, encounter_id, a1c_result, glucose_result);
+            addPhysician(conn, encounter_id, specialty);
 
             String change = record.get(45);
 
@@ -141,7 +158,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addDischarge(Connection conn, int discharge_id, String discharge_name) {
@@ -156,7 +177,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addPatient(Connection conn, int id, String race, String gender, String code) {
@@ -173,7 +198,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addEncounter(Connection conn, int id, int procedures, int meds, int type, int days, String age, String readmitted) {
@@ -194,7 +223,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch(SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addHas(Connection conn, int enc_id, int pat_id){
@@ -209,7 +242,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addGetsPatientFrom(Connection conn, int id, int source_id){
@@ -224,7 +261,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addSendsPatientTo(Connection conn, int id, int discharge_id){
@@ -239,7 +280,50 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
+    private static void addVitals(Connection conn, int id, String a1c_result, String glucose_result){
+        PreparedStatement ps;
+        try {
+            String insertVitals = "Insert INTO Vitals" +
+                    "(encounter_id, a1c_result, glucose_result)" +
+                    "values (?, ?, ?)";
+            ps = conn.prepareStatement(insertVitals);
+            ps.setInt(1, id);
+            ps.setString(2, a1c_result);
+            ps.setString(3, glucose_result);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
+    private static void addPhysician(Connection conn, int id, String specialty){
+        PreparedStatement ps;
+        try {
+            String insertPhysician = "Insert INTO Physician" +
+                    "(encounter_id, specialty)" +
+                    "values (?, ?)";
+            ps = conn.prepareStatement(insertPhysician);
+            ps.setInt(1, id);
+            ps.setString(2, specialty);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addMedication(Connection conn, String med_name) {
@@ -253,7 +337,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addPrescribes(Connection conn, int id, String med_name, String dosage_change){
@@ -269,7 +357,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static void addDiagnoses(Connection conn, int id, String icd_code, int priority){
@@ -307,7 +399,11 @@ public class Insert {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Duplicate entry")) {
+                System.out.println("Duplicate entry");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
     private static Connection createConnection() {

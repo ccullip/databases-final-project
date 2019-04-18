@@ -8,10 +8,15 @@ def index(request):
     return HttpResponse('Hello, welcome to the index page.')
 
 def home(request):
-	return render(request, 'home.html')
+    return render(request, 'home.html')
 
 def table(request):
-	return render(request, 'table.html')
+    patients = Patient.objects.filter(gender="Female").values()
+    fields = Patient._meta.concrete_fields
+    field_list = []
+    for field in fields:
+        field_list.append(field.name)
+    return render(request, 'table.html', {'patients': patients, 'fields': field_list})
 
 def patient_data(request):
     data = Patient.objects.get(patient_id=7128)

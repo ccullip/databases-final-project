@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib import admin
-from admin_portal.models import Patient
+from .models import Patient
 
 # Register your models here.
 

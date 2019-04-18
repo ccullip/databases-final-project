@@ -1,9 +1,18 @@
 /*
 BOOTSTRAP CSS
  */
+html, .container-fluid, .row {
+  height: 100%;
+}
 
 body {
   font-size: .875rem;
+  height:100%;
+}
+
+.table {
+  width: 100%;
+  height: 90%;
 }
 
 .feather {

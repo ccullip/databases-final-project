@@ -1,0 +1,10 @@
+# virtual env
+env/
+
+# byte-compiled files
+*.pyc
+*/__pycache__/*
+
+# OSX files
+.DS_Store
+*/.DS_Store

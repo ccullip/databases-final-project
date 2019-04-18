@@ -21,7 +21,7 @@ env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" pip3
 
 Run server, default port is 8000
 ```
-python3 manage.py runserver <optional port number>
+python3 manage.py runserver <optional port number> --settings=website.settings
 ```
 
 Quit the server whenever with ^C (CONTROL - C)

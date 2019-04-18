@@ -7,6 +7,11 @@ from .models import Patient
 def index(request):
     return HttpResponse('Hello, welcome to the index page.')
 
+def home(request):
+	return render(request, 'home.html')
+
+def table(request):
+	return render(request, 'table.html')
 
 def patient_data(request):
     data = Patient.objects.get(patient_id=7128)

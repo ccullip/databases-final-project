@@ -127,6 +127,164 @@
               </button>
             </div>
           </div>
+          <div>
+            <div class="filter">
+              <p class="filter-title">Gender</p>
+              <select name="Gender">
+                <option value="" disabled selected>Select...</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="filter">
+              <p class="filter-title">Race</p>
+              <select name="Race">
+                <option value="" disabled selected>Select...</option>
+                <option value="AfricanAmerican">African American</option>
+                <option value="Asian">Asian</option>
+                <option value="Caucasian">Caucasian</option>
+                <option value="Hispanic">Hispanic</option>
+                <option value="Other">Other</option>
+                <option value="?">Unknown</option>
+              </select>
+            </div>
+            <div class="filter">
+              <p class="filter-title">Age Range</p>
+              <select name="Age">
+                <option value="" disabled selected>Select...</option>
+                <option value="[0-10)">[0-10)</option>
+                <option value="[10-20)">[10-20)</option>
+                <option value="[20-30)">[20-30)</option>
+                <option value="[30-40)">[30-40)</option>
+                <option value="[40-50)">[40-50)</option>
+                <option value="[50-60)">[50-60)</option>
+                <option value="[60-70)">[60-70)</option>
+                <option value="[70-80)">[70-80)</option>
+                <option value="[80-90)">[80-90)</option>
+                <option value="[90-100)">[90-100)</option>
+              </select>
+            </div>
+            <div class="filter">
+              <p class="filter-title">Medication</p>
+              <select name="Medication" multiple>
+                <option value="" disabled selected>Select...</option>
+                <option value="metformin">Metformin</option>
+                <option value="repaglinide">Repaglinide</option>
+                <option value="nateglinide">Nateglinide</option>
+                <option value="chlorpropamide">Chlorpropamide</option>
+                <option value="glimepiride">Glimepiride</option>
+                <option value="acetohexamide">Acetohexamide</option>
+                <option value="glipizide">Glipizide</option>
+                <option value="glyburide">Glyburide</option>
+                <option value="tolbutamide">Tolbutamide</option>
+                <option value="pioglitazone">Pioglitazone</option>
+                <option value="rosiglitazone">Rosiglitazone</option>
+                <option value="acarbose">Acarbose</option>
+                <option value="miglitol">Miglitol</option>
+                <option value="troglitazone">Troglitazone</option>
+                <option value="tolazamide">Tolazamide</option>
+                <option value="examide">Examide</option>
+                <option value="citoglipton">Citoglipton</option>
+                <option value="insulin">Insulin</option>
+                <option value="glyburide-metformin">Glyburide-metformin</option>
+                <option value="glipizide-metformin">Glipizide-metformin</option>
+                <option value="glimepiride-pioglitazone">Glimepiride-pioglitazone</option>
+                <option value="metformin-rosiglitazone">Metformin-rosiglitazone</option>
+                <option value="metformin-pioglitazone">Metformin-pioglitazone</option>
+              </select>
+            </div>
+            <div class="filter">
+              <p class="filter-title">A1c Result</p>
+              <select name="a1c_result">
+                <option value="" disabled selected>Select...</option>
+                <option value=">7">> 7%</option>
+                <option value=">8">> 8% </option>
+                <option value="None">None</option>
+                <option value="Norm">Norm</option>
+              </select>
+            </div>
+            <div class="filter">
+              <p class="filter-title">Glucose Level</p>
+              <select name="glucose_result">
+                <option value="" disabled selected>Select...</option>
+                <option value=">200">> 200 mg/dL</option>
+                <option value=">300">> 300 mg/dL </option>
+                <option value="None">None</option>
+                <option value="Norm">Norm</option>
+              </select>
+            </div>
+            <div class="filter">
+              <p class="filter-title">Admission Source</p>
+              <select name="source_id">
+                <option value="" disabled selected>Select...</option>
+                <option value="1">Physician Referral</option>
+                <option value="2">Clinic Referral</option>
+                <option value="3">HMO Referral</option>
+                <option value="4">Transfer from a hospital</option>
+                <option value="5">Transfer from a Skilled Nursing Facility (SNF)</option>
+                <option value="6">Transfer from another health care facility</option>
+                <option value="7">Emergency Room</option>
+                <option value="8">Court/Law Enforcement</option>
+                <option value="9">Not Available</option>
+                <option value="10">Transfer from critical access hospital</option>
+                <option value="11">Normal Delivery</option>
+                <option value="12">Premature Delivery</option>
+                <option value="13">Sick Baby</option>
+                <option value="14">Extramural Birth</option>
+                <option value="15">Not Available</option>
+                <option value="17">NULL</option>
+                <option value="18">Transfer From Another Home Health Agency</option>
+                <option value="19">Readmission to Same Home Health Agency</option>
+                <option value="20">Not Mapped</option>
+                <option value="21">Unknown/Invalid</option>
+                <option value="22">Transfer from hospital inpt/same fac reslt in a sep claim</option>
+                <option value="23">Born inside this hospital</option>
+                <option value="24">Born outside this hospital</option>
+                <option value="25">Transfer from Ambulatory Surgery Center</option>
+                <option value="26">Transfer from Hospice</option>
+              </select>
+            </div>
+            <div class="filter">
+              <p class="filter-title">Discharge Destination</p>
+              <select name="discharge_id">
+                <option value="" disabled selected>Select...</option>
+                <option value="1">Discharged to home</option>
+                <option value="2">Discharged/transferred to another short term hospital</option>
+                <option value="3">Discharged/transferred to SNF</option>
+                <option value="4">Discharged/transferred to ICF</option>
+                <option value="5">Discharged/transferred to another type of inpatient care institution</option>
+                <option value="6">Discharged/transferred to home with home health service</option>
+                <option value="7">Left AMA</option>
+                <option value="8">Discharged/transferred to home under care of Home IV provider</option>
+                <option value="9">Admitted as an inpatient to this hospital</option>
+                <option value="10">Neonate discharged to another hospital for neonatal aftercare</option>
+                <option value="11">Expired</option>
+                <option value="12">Still patient or expected to return for outpatient services</option>
+                <option value="13">Hospice/home</option>
+                <option value="14">Hospice/medical facility</option>
+                <option value="15">Discharged/transferred within this institution to Medicare approved swing bed</option>
+                <option value="16">Discharged/transferred/referred another institution for outpatient services</option>
+                <option value="17">Discharged/transferred/referred to this institution for outpatient services</option>
+                <option value="18">NULL</option>
+                <option value="19">Expired at home. Medicaid only, hospice.</option>
+                <option value="20">Expired in a medical facility. Medicaid only, hospice.</option>
+                <option value="21">Expired, place unknown. Medicaid only, hospice.</option>
+                <option value="22">Discharged/transferred to another rehab fac including rehab units of a hospital .</option>
+                <option value="23">Discharged/transferred to a long term care hospital.</option>
+                <option value="24">Discharged/transferred to a nursing facility certified under Medicaid but not certified under Medicare.</option>
+                <option value="25">Not Mapped</option>
+                <option value="26">Unknown/Invalid</option>
+                <option value="27">Discharged/transferred to a federal health care facility.</option>
+                <option value="28">Discharged/transferred/referred to a psychiatric hospital of psychiatric distinct part unit of a hospital</option>
+                <option value="29">Discharged/transferred to a Critical Access Hospital (CAH).</option>
+                <option value="30">Discharged/transferred to another Type of Health Care Institution not Defined Elsewhere</option>
+              </select>
+            </div>
+            <div style="text-align:center;margin-right:90px;">
+              <button class="filter-button">Filter</button>
+            </div>
+          </div>
 
           <!--  data visulation stuff
           <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->

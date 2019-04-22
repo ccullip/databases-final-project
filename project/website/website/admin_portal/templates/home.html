@@ -130,7 +130,7 @@
           <div>
             <div class="filter">
               <p class="filter-title">Gender</p>
-              <select name="Gender">
+              <select name="Gender" form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
@@ -139,7 +139,7 @@
             </div>
             <div class="filter">
               <p class="filter-title">Race</p>
-              <select name="Race">
+              <select name="Race" form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value="AfricanAmerican">African American</option>
                 <option value="Asian">Asian</option>
@@ -151,7 +151,7 @@
             </div>
             <div class="filter">
               <p class="filter-title">Age Range</p>
-              <select name="Age">
+              <select name="Age" form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value="[0-10)">[0-10)</option>
                 <option value="[10-20)">[10-20)</option>
@@ -167,7 +167,7 @@
             </div>
             <div class="filter">
               <p class="filter-title">Medication</p>
-              <select name="Medication" multiple>
+              <select name="Medication" multiple form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value="metformin">Metformin</option>
                 <option value="repaglinide">Repaglinide</option>
@@ -196,7 +196,7 @@
             </div>
             <div class="filter">
               <p class="filter-title">A1c Result</p>
-              <select name="a1c_result">
+              <select name="a1c_result" form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value=">7">> 7%</option>
                 <option value=">8">> 8% </option>
@@ -206,7 +206,7 @@
             </div>
             <div class="filter">
               <p class="filter-title">Glucose Level</p>
-              <select name="glucose_result">
+              <select name="glucose_result" form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value=">200">> 200 mg/dL</option>
                 <option value=">300">> 300 mg/dL </option>
@@ -216,7 +216,7 @@
             </div>
             <div class="filter">
               <p class="filter-title">Admission Source</p>
-              <select name="source_id">
+              <select name="source_id" form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value="1">Physician Referral</option>
                 <option value="2">Clinic Referral</option>
@@ -247,7 +247,7 @@
             </div>
             <div class="filter">
               <p class="filter-title">Discharge Destination</p>
-              <select name="discharge_id">
+              <select name="discharge_id" form="filter-form">
                 <option value="" disabled selected>Select...</option>
                 <option value="1">Discharged to home</option>
                 <option value="2">Discharged/transferred to another short term hospital</option>
@@ -282,7 +282,9 @@
               </select>
             </div>
             <div style="text-align:center;margin-right:90px;">
-              <button class="filter-button">Filter</button>
+              <form method="post" id="filter-form"><input type="submit" value="Filter">
+              {% csrf_token %}
+              </form>
             </div>
           </div>
 

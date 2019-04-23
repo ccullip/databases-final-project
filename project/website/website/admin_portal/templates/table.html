@@ -22,7 +22,7 @@
     <title>Admin Portal</title>
   </head>   
     <body>
-          <p>rendering</p>
+    <br>
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <!--  jquery stuff needs to be able to change this -->
@@ -34,9 +34,9 @@
                 </tr>
               </thead>
               <tbody>
-                {% for patient in patients %}
+                {% for row in data %}
                 <tr>
-                  {% for attr, value in patient.items %}
+                  {% for value in row %}
                   <td>{{ value }}</td>
                   {% endfor %}
                 </tr>

@@ -133,3 +133,20 @@ body {
   float: left;
   padding: 10px;
 }
+
+#bootstrap-override .row-data:hover{
+    background-color: darkgrey;
+    cursor: pointer;
+}
+
+#bootstrap-override #modal {
+    background-color: blue; /* Fallback color */
+    position: relative; /* Stay in place */
+    z-index: 10000; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 400px; /* Full width */
+    height: 400px; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+}

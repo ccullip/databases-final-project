@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.forms import modelformset_factory
 from .helper import *
 from django.db import connection, transaction
+# from . import FusionCharts
 
 
 # Create your views here.
@@ -20,10 +21,16 @@ def home(request):
 
     return render(request, 'home.html')
 
+# def graphics(request);
+#     return render(request, 'graphics.html')
+
+
 def table(request):
     request_data = request.session.pop('data')
-    data = Patient.objects.filter(gender="Female").values()
+    data = request_data #Patient.objects.filter(gender="Female").values()
     field_list = ['patient_id', 'race', 'gender', 'payer_id']
+    values = []
+    size = 0
     if request_data is not None:
         field_list = ['Patient Id', 'Race', 'Gender']
         keys = request_data.keys()
@@ -37,17 +44,20 @@ def table(request):
                  "Source": False,
                  "Discharge": False}
         for key in keys:
-            print(key)
+            print("[" + key + "]")
             if key == "Gender":
                 value = request_data.get(key)
+                values.append(value + " ")
                 where_ps += "Patient.gender = '" + value + "'"
             elif key == "Race":
                 value = request_data.get(key)
+                values.append(value + " ")
                 if where_ps != "WHERE ":
                     where_ps += " AND "
                 where_ps += "Patient.race = '" + value + "'"
             elif key == "Age":
                 value = request_data.get(key)
+                values.append(value + " ")
                 field_list.append('Age')
                 joins["Encounter"] = True
                 # add to select statement
@@ -58,6 +68,7 @@ def table(request):
                 where_ps += "Encounter.age = '" + value + "'"
             elif key == "Medication":
                 value = request_data.get(key)
+                values.append(value + " ")
                 field_list.append('Medication')
                 joins["Encounter"] = True
                 joins["Medication"] = True
@@ -69,6 +80,7 @@ def table(request):
                 where_ps += "Medication.med_name = '" + value + "'"
             elif key == "a1c_result":
                 value = request_data.get(key)
+                values.append(value + " ")
                 field_list.append("A1c Result")
                 joins["Encounter"] = True
                 joins["Vitals"] = True
@@ -80,6 +92,7 @@ def table(request):
                 where_ps += "Vitals.a1c_result = '" + value + "'"
             elif key == "glucose_result":
                 value = request_data.get(key)
+                values.append(value + " ")
                 field_list.append("Glucose Result")
                 joins["Encounter"] = True
                 joins["Vitals"] = True
@@ -91,6 +104,7 @@ def table(request):
                 where_ps += "Vitals.glucose_result = '" + value + "'"
             elif key == "source_id":
                 value = request_data.get(key)
+                values.append(value + " ")
                 field_list.append("Admission Source")
                 joins["Encounter"] = True
                 joins["Source"] = True
@@ -102,6 +116,7 @@ def table(request):
                 where_ps += "Source.source_id = '" + value + "'"
             elif key == "discharge_id":
                 value = request_data.get(key)
+                values.append(value + " ")
                 field_list.append("Discharge Destination")
                 joins["Encounter"] = True
                 joins["Discharge"] = True
@@ -131,10 +146,14 @@ def table(request):
             from_ps += ", Discharge, SendsPatientTo "
 
         ps = select_ps + " " + from_ps + " " + where_ps + ";"
-        print(ps)
+        # print(ps)
         cursor.execute(ps)
         data = cursor.fetchall()
-    return render(request, 'table.html', {'data': data, 'fields': field_list})
+        size = len(data)
+    print(data)
+    print(field_list)
+
+    return render(request, 'table.html', {'data': data, 'fields': field_list,'filters': values, "size": size})
 
 def patient_data(request):
     data = Patient.objects.get(patient_id=7128)

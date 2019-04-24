@@ -20,9 +20,19 @@
     <link href = "../static/dashboard.css" rel = "stylesheet" type = "text/css">
 
     <title>Admin Portal</title>
-  </head>   
+  </head>
     <body>
     <br>
+        {% if filters %}
+          Filters used:
+            <p>
+              |
+              {% for filter in filters %}
+                <i>{{ filter }}</i> |
+              {% endfor %}
+            </p>
+            <p>{{ size }} rows<p>
+        {% endif %}
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <!--  jquery stuff needs to be able to change this -->

@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600" rel="stylesheet">
     <link href = "../static/style.css" rel = "stylesheet" type = "text/css" >
     <link href = "../static/dashboard.css" rel = "stylesheet" type = "text/css">
-  
+
     <title>Admin Portal</title>
   </head>
 
@@ -46,6 +46,7 @@
                   Dashboard <span class="sr-only">(current)</span>
                 </a>
               </li>
+              <!---
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file"></span>
@@ -77,9 +78,9 @@
                 </a>
               </li>
             </ul>
-
+            !-->
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Saved reports</span>
+              <span>Saved tables</span>
               <a class="d-flex align-items-center text-muted" href="#">
                 <span data-feather="plus-circle"></span>
               </a>
@@ -88,25 +89,19 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file-text"></span>
-                  Current month
+                  Table 1
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file-text"></span>
-                  Last quarter
+                  Table 2
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="file-text"></span>
-                  Social engagement
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Year-end sale
+                  Table 3
                 </a>
               </li>
             </ul>
@@ -288,10 +283,11 @@
             </div>
           </div>
 
+          <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
           <!--  data visulation stuff
           <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
          <!--  <div w3-include-html="table.html"> -->
-         <object class="table" data="table.html"></object>
+         <object class="table" data="table.html" style="height:600px;"></object>
         </main>
       </div>
     </div>

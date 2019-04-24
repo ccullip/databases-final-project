@@ -1,6 +1,7 @@
 def createPreparedStatement(cursor, request_data):
     field_list = ['Patient Id', 'Race', 'Gender']
     keys = request_data.keys()
+    values = []
     select_ps = "SELECT Patient.patient_id, Patient.race, Patient.gender"
     from_ps = "FROM Patient"
     where_ps = "WHERE "
@@ -10,6 +11,9 @@ def createPreparedStatement(cursor, request_data):
              "Source": False,
              "Discharge": False}
     for key in keys:
+        if key != "csrfmiddlewaretoken":
+            values.append(request_data.get(key))
+
         if key == "Gender":
             value = request_data.get(key)
             where_ps += "Patient.gender = '" + value + "'"
@@ -105,4 +109,4 @@ def createPreparedStatement(cursor, request_data):
     ps = select_ps + " " + from_ps + " " + where_ps + ";"
     print(ps)
     cursor.execute(ps)
-    return cursor.fetchall(), field_list
+    return cursor.fetchall(), field_list, values

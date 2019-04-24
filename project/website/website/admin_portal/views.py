@@ -30,6 +30,7 @@ def table(request):
     cursor = connection.cursor()
     patient_data = []
     patient_fields = []
+    filters = []
     if 'data' in request.session.keys():
         request_data = request.session.get('data')
     else:
@@ -47,16 +48,16 @@ def table(request):
         patient_fields = ['patient_id', 'race', 'gender', 'payer_id', 'encounter_id', 'num_lab_procedures', 'num_medications', 'admiss_type', 'duration', 'age', 'readmitted']
 
     if request_data is not None:
-        data, table_field_list = createPreparedStatement(cursor, request_data)
+        data, table_field_list, filters = createPreparedStatement(cursor, request_data)
+        size = len(data)
     else:
         ps = "SELECT Patient.patient_id, Patient.race, Patient.gender, Patient.payer_code FROM Patient WHERE Patient.payer_code != '?' LIMIT 100;"
         cursor.execute(ps)
         data = cursor.fetchall()
         size = len(data)
         table_field_list = ['patient_id', 'race', 'gender', 'payer_id']
-    return render(request, 'table.html', {'data': data, 'table_fields': table_field_list, "size": size, 'patient_data': patient_data, 'patient_fields': patient_fields})
+    return render(request, 'table.html', {'data': data, 'table_fields': table_field_list, "size": size, 'patient_data': patient_data, 'patient_fields': patient_fields, "filters": filters})
 
 def patient_data(request):
     data = Patient.objects.get(patient_id=7128)
     return HttpResponse(data)
-

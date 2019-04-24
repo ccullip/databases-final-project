@@ -33,6 +33,7 @@ def table(request):
     filters = []
     if 'data' in request.session.keys():
         request_data = request.session.get('data')
+        print(request_data)
     else:
         request_data = None
     keys = request.POST.keys()
@@ -47,7 +48,7 @@ def table(request):
         print(patient_data)
         patient_fields = ['patient_id', 'race', 'gender', 'payer_id', 'encounter_id', 'num_lab_procedures', 'num_medications', 'admiss_type', 'duration', 'age', 'readmitted']
 
-    if request_data is not None:
+    if request_data is not None and len(request_data.keys()) > 1:
         data, table_field_list, filters = createPreparedStatement(cursor, request_data)
         size = len(data)
     else:

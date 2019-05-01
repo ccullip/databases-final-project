@@ -89,22 +89,15 @@ def createPreparedStatement(cursor, request_data):
             where_ps += "Discharge.discharge_id = '" + value + "'"
 
     if joins["Encounter"]:
-        if where_ps != "WHERE ":
-            where_ps += " AND "
-        where_ps += "Encounter.encounter_id = Has.encounter_id AND Has.patient_id = Patient.patient_id "
-        from_ps += ", Has, Encounter"
+        from_ps += " natural join Has natural join Encounter"
     if joins["Medication"]:
-        where_ps += "AND Medication.med_name = Prescribes.med_name AND Prescribes.encounter_id = Encounter.encounter_id "
-        from_ps += ", Prescribes, Medication"
+        from_ps += " natural join Prescribes natural join Medication"
     if joins["Vitals"]:
-        where_ps += "AND Vitals.encounter_id = Encounter.encounter_id "
-        from_ps += ", Vitals"
+        from_ps += " natural join Vitals"
     if joins["Source"]:
-        where_ps += "AND Source.source_id = GetsPatientFrom.source_id AND GetsPatientFrom.encounter_id = Encounter.encounter_id "
-        from_ps += ", Source, GetsPatientFrom "
+        from_ps += " natural join GetsPatientFrom natural join Source "
     if joins["Discharge"]:
-        where_ps += "AND Discharge.discharge_id = SendsPatientTo.discharge_id AND SendsPatientTo.discharge_id = Encounter.encounter_id "
-        from_ps += ", Discharge, SendsPatientTo "
+        from_ps += " natural join SendsPatientTo natural join Discharge "
 
     ps = select_ps + " " + from_ps + " " + where_ps + ";"
     print(ps)

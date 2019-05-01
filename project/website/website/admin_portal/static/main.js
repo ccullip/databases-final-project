@@ -8,5 +8,4 @@ function sendData(row){
 
 function hidePopup() {
     document.getElementById("popup-container").style.visibility = "hidden";
-    console.log("changed to hidden");
 };

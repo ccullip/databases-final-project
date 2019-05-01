@@ -23,6 +23,40 @@
   </head>
 
   <body>
+
+  <div id="popup-container">
+     <div id="popup-content">
+      <p style="font-size:20px;">Info for Patient {{ patient_data.0.1 }}</p>
+       <div class="table-responsive">
+                  <table class="table table-striped table-sm">
+                    <!--  jquery stuff needs to be able to change this -->
+                      <thead>
+                        <tr>
+                          {% for patient_field in patient_fields %}
+                          <th>{{ patient_field }}</th>
+                          {% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody style="font-size:12px;">
+                        {% for row in patient_data %}
+                        <tr class="row-data">
+                          {% for value in row %}
+                          <td style="white-space:nowrap">{{ value }}</td>
+                          {% endfor %}
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+                </div>
+       <button onclick="hidePopup()">Close</button>
+     </div>
+  {% if patient_data %}
+      <script>document.getElementById("popup-container").style.visibility = "visible";
+      console.log("changed");
+      </script>
+    {% endif %}
+
+  </div>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Charlotte + Steph</a>
       <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
@@ -285,7 +319,48 @@
           <!--  data visulation stuff
           <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
          <!--  <div w3-include-html="table.html"> -->
-         <object class="table" data="table.html" style="height:600px;"></object>
+         <div id="bootstrap-override">
+
+          <br>
+           <br>
+              {% if filters %}
+                Filters used:
+                  <p>
+                    |
+                    {% for filter in filters %}
+                      <i>{{ filter }}</i> |
+                    {% endfor %}
+                  </p>
+                  <p>{{ size }} rows<p>
+              {% endif %}
+                <div class="table-responsive" style="height:400px">
+                  <table class="table table-striped table-sm">
+                    <!--  jquery stuff needs to be able to change this -->
+                    {% if data %}
+                      <thead>
+                        <tr>
+                          {% for table_field in table_fields %}
+                            <th>{{ table_field }}</th>
+                          {% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for row in data %}
+                        <tr class="row-data" onclick="sendData(this.closest('tr'))">
+                          {% for value in row %}
+                          <td>{{ value }}</td>
+                          {% endfor %}
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    {% else %}
+                      No patients match your search query. Please try again.
+                    {% endif %}
+                  </table>
+                </div>
+          <form method="post" id="patient-form"><input name="select-patient" id="patient-id" type="hidden" value="Default">{% csrf_token %}</form>
+
+         </div>
         </main>
       </div>
     </div>

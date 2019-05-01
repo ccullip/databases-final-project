@@ -139,14 +139,23 @@ body {
     cursor: pointer;
 }
 
-#bootstrap-override #modal {
-    background-color: blue; /* Fallback color */
-    position: relative; /* Stay in place */
-    z-index: 10000; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 400px; /* Full width */
-    height: 400px; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
+#popup-container {
+    height:100%;
+    width:100%;
+    text-align:center;
+    z-index:1050;
+    position:fixed;
+    visibility: hidden;
+}
+
+#popup-content {
+    background-color:#F8F8F8;
+    width:900px;
+    height:500px;
+    display:inline-block;
+    margin-left:100px;
+    margin-top:150px;
+    border-radius:20px;
+    border:5px #DCDCDC solid;
+    padding:20px;
 }

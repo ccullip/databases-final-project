@@ -76,6 +76,7 @@ def home(request):
 # def graphics(request);
 #     return render(request, 'graphics.html')
 
-def patient_data(request):
-    data = Patient.objects.get(patient_id=7128)
-    return HttpResponse(data)
+def add(request):
+    data = request.POST or None
+    print(data)
+    return render(request, 'add.html')

@@ -159,3 +159,33 @@ body {
     border:5px #DCDCDC solid;
     padding:20px;
 }
+
+.med_names {
+    display:inline-block;
+    width:155px;
+    margin:0px;
+}
+
+.med-container {
+    margin-left:150px;
+    width: 320px;
+    display:inline-block;
+}
+
+.medbtn {
+    width:50px;
+}
+
+.radio-headers {
+    display:inline-block;
+    width:50px;
+    text-align:center;
+}
+
+.alt {
+    background-color:#DCDCDC;
+}
+
+.reg {
+    background-color:#F8F8F8;
+}

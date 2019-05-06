@@ -1,5 +1,5 @@
 # virtual env
-*/env/
+*/env/*
 
 # byte-compiled files
 *.pyc
@@ -13,3 +13,5 @@
 src/AdminPortal/.idea/*
 */.idea/*
 */target/*
+
+project/website/website/env/*

@@ -10,10 +10,10 @@
 
 #### Django Environment
 - Django requires a virtual environment to run itself locally.
-- First navigate to website folder.
+- First navigate to webapp folder.
 
 ```
-$   cd website/
+$   cd webapp/
 ```
 - Within website/ path, create and enter your virtual environment.
 ```
@@ -29,9 +29,9 @@ $   env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" 
 ```
 
 Then you should be ready to deploy our website! :)
-## Deploying Website
+## Deploying Web App
 - After completing the set up above, deploying is easy:
-  - Navigate to website/ directory.
+  - Navigate to webapp/ directory.
   - Run server (default port is 8000)
   ```
   $   python3 manage.py runserver <optional port number>
@@ -42,4 +42,4 @@ Then you should be ready to deploy our website! :)
   $   deactivate
   ```
 
-Created by Charlotte Cullip and Stephanie Angulo.
+*Created by Charlotte Cullip and Stephanie Angulo.*

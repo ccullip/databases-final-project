@@ -1,8 +1,8 @@
 ### Project Description
-The project will involve a database of diabetic patient encounters in US hospitals from the years 1999-2008. The dataset includes information such as medications, diagnoses, vitals results, along with more generic data such as weight, age, race, and gender. The end product will be a mockup of an administration portal web page where the user can filter the data by selecting various attribute values. This will allow the “administrator” to see macroscopic patient data or, perhaps, view one hospital visit of a single patient. By filtering for specific results, the user will be able to see the data visualized and perhaps even find their own correlations within the dataset. 
+The project will involve a database of diabetic patient encounters in US hospitals from the years 1999-2008. The dataset includes information such as medications, diagnoses, vitals results, along with more generic data such as weight, age, race, and gender. The end product will be a mockup of an administration portal web page where the user can filter the data by selecting various attribute values. This will allow the “administrator” to see macroscopic patient data or, perhaps, view one hospital visit of a single patient. By filtering for specific results, the user will be able to see the data visualized and perhaps even find their own correlations within the dataset.
 
 ### Data
-The majority of the sample data has already been collected, which is represented in the ER diagram below. Although some rows have missing attributes, the construction of the database system ensures that these attributes will not be primary keys. Some entities still also need more info, such as the Diagnosis entity, which will need names of diagnoses assigned to ICD codes. This will be done by downloading a .csv spreadsheet of ICD-9 codes and their corresponding names, then using a program to populate the Diagnosis entity table. Additionally, more attributes for the Diagnosis and/or Medication entities may be added manually to make those tables larger and more interesting. Sample data can be viewed in the attached Excel spreadsheet. Ten instances have been chosen as a subset of the larger dataset which includes over 100,000 entries. 
+The majority of the sample data has already been collected, which is represented in the ER diagram below. Although some rows have missing attributes, the construction of the database system ensures that these attributes will not be primary keys. Some entities still also need more info, such as the Diagnosis entity, which will need names of diagnoses assigned to ICD codes. This will be done by downloading a .csv spreadsheet of ICD-9 codes and their corresponding names, then using a program to populate the Diagnosis entity table. Additionally, more attributes for the Diagnosis and/or Medication entities may be added manually to make those tables larger and more interesting. Sample data can be viewed in the attached Excel spreadsheet. Ten instances have been chosen as a subset of the larger dataset which includes over 100,000 entries.
 
 ### Assumptions
 * Every patient must have at least one hospital visit.
@@ -16,7 +16,7 @@ The majority of the sample data has already been collected, which is represented
 
 ### ER Diagram
 
-<img src="ER_V7.png">
+<img src="er_diagram.png">
 
 ### Relation Schema
 Patient(**patient_nbr**, race, payer_code, gender) <br>
@@ -41,4 +41,3 @@ The application will consist of an administration portal web page (created with 
 <a href="https://www.hindawi.com/journals/bmri/2014/781670/">Data Description</a>
 
 Not used columns: num_lab_procedures num_procedures number_outpatient number_emergency number_inpatient, num_diagnoses, num_meds
-

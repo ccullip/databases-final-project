@@ -1,6 +1,8 @@
 ﻿COMP 373 – Final Project
 *A admin portal web app for doctors viewing diabetic patients' records*
 
+## Code structure overview
+
 ## Set up
 #### Data insertion
 - Run src/schema.sql in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.

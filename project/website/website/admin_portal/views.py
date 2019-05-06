@@ -16,7 +16,6 @@ def index(request):
     return HttpResponse('Hello, welcome to the index page.')
 
 def home(request):
-    print(constants.c)
     data = request.POST or None
     if data and 'select-patient' not in data:
         request.session['data'] = data
@@ -33,6 +32,7 @@ def home(request):
     encounter_fields = []
     encounter_data = []
     filters = []
+    chart = None
 
     if data and 'select-patient' in data:
         print('entered')
@@ -46,8 +46,22 @@ def home(request):
         cursor.execute(ps)
         patient_data = cursor.fetchall()
     if request_data is not None and len(request_data) > 1:
+        print("hello!")
+        print("--------------------")
+        print(request_data)
+        keys = list(request_data.keys())
+        keys.remove(constants.token_name)
+        print(keys)
+        print()
+        # print(list(request_data.keys()).remove(constants.token_name))
+        print("--------------------")
         data, table_field_list, filters = createPreparedStatement(cursor, request_data)
         size = len(data)
+        print(size)
+        print(table_field_list)
+        print(filters)
+        chart = createPieChart()
+        # print(data)
     else:
         ps = "SELECT * FROM Patient WHERE Patient.payer_code != '?' LIMIT 50;"
         cursor.execute(ps)
@@ -56,7 +70,7 @@ def home(request):
         table_field_list = ['patient_id', 'race', 'gender', 'payer_id']
     return render(request, 'home.html',
                   {'data': data, 'table_fields': table_field_list, "size": size, 'patient_data': patient_data, 'encounter_data': encounter_data,
-                   'encounter_fields': encounter_fields, "filters": filters})
+                   'encounter_fields': encounter_fields, "filters": filters, "chart": chart})
 
 
 def add(request):

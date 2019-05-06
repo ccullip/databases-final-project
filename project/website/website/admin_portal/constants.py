@@ -1,8 +1,10 @@
+token_name = "csrfmiddlewaretoken"
 
-c = "hello there"
 encounter_fields = ['Encounter ID', 'Age', 'A1c Result', 'Glucose Result', '# of lab procedures',
                     '# of medications', 'Admission type', 'Duration (days)', 'Readmitted?',
                     'Diagnosis 1', 'Diagnosis 2', 'Diagnosis 3', 'Medication']
+
+pie_graphs = ["Gender", "Race", "Age"]
 
 def createGiantPreparedStatement(patient_id):
     return "select encounter_id, age, a1c_result, glucose_result, num_lab_procedures, num_medications, admiss_type, duration, readmitted, " \

@@ -1,3 +1,17 @@
+from . import constants
+from .charts import PieChart
+from pygal.style import DarkStyle
+
+def createPieChart():
+    print("hello")
+    chart = PieChart(
+            'chart test title',
+            height=400,
+            width=400,
+            explicit_size=True
+        )
+    return chart.generate()
+
 def createPreparedStatement(cursor, request_data):
     field_list = ['Patient Id', 'Race', 'Gender']
     keys = request_data.keys()

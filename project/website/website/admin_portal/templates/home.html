@@ -325,19 +325,6 @@
           <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
          <!--  <div w3-include-html="table.html"> -->
          <div id="bootstrap-override">
-
-          <br>
-           <br>
-              {% if filters %}
-                Filters used:
-                  <p>
-                    |
-                    {% for filter in filters %}
-                      <i>{{ filter }}</i> |
-                    {% endfor %}
-                  </p>
-                  <p>{{ size }} rows<p>
-              {% endif %}
                 <div class="table-responsive" style="height:400px">
                   <table class="table table-striped table-sm">
                     <!--  jquery stuff needs to be able to change this -->
@@ -363,13 +350,30 @@
                     {% endif %}
                   </table>
                 </div>
+                <br>
+                {% if filters %}
+                  <h5>Filters used</h5>
+                    <p>
+                      |
+                      {% for filter in filters %}
+                        <i>{{ filter }}</i> |
+                      {% endfor %}
+                    </p>
+                    <p>{{ size }} rows<p>
+                {% endif %}
+                {% if chart %}
+                  <br>
+                  <p>testing chart!!</p>
+                  {{ chart |safe }}
+                {% endif %}
+
           <form method="post" id="patient-form"><input name="select-patient" id="patient-id" type="hidden" value="Default">{% csrf_token %}</form>
 
          </div>
         </main>
       </div>
     </div>
-
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>  
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>

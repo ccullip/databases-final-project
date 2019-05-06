@@ -15,13 +15,16 @@
 ```
 $   cd webapp/
 ```
+
 - Within website/ path, create and enter your virtual environment.
+
 ```
 $   python3 -m venv env   # to create a virtual environment
 $   . env/bin/activate    # activate/enter virtual environment
 ```
 
 - Then you must install the necessary dependencies for this web app to run.
+
 ```
 $   pip3 install django
 $   pip install --upgrade pip   # pip will probably be out of date, so upgrade it
@@ -33,11 +36,14 @@ Then you should be ready to deploy our website! :)
 - After completing the set up above, deploying is easy:
   - Navigate to webapp/ directory.
   - Run server (default port is 8000)
+
   ```
   $   python3 manage.py runserver <optional port number>
   ```
+
   - Quit the server whenever with ^C **(CONTROL - C)**
   - To close the virtual environment:
+
   ```
   $   deactivate
   ```

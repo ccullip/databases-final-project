@@ -5,6 +5,13 @@
 #### Data insertion
 - Run src/schema.sql in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.
 
+- Ensure your MySQL's settings has the **only_full_group_by** turned off.
+
+```
+mysql >   SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+```
+
 - Open src/AdminPortal in IntelliJ or Eclipse and run the project to insert the data.
 
   - Insert.java takes in 2 program parameters, your **MySQL password** and **MySQL username**. Passing in your username is optional if you're using "root" as your username.

@@ -33,12 +33,13 @@ def home(request):
     encounter_data = []
     filters = []
     chart = None
+    charts = []
 
     if data and 'select-patient' in data:
         print('entered')
         patient_id = data.get('select-patient')
         encounter_fields = constants.encounter_fields
-        ps = constats.createGiantPreparedStatement(patient_id)
+        ps = constants.createGiantPreparedStatement(patient_id)
         cursor.execute(ps)
         encounter_data = cursor.fetchall()
         patient_cols = "patient_id, race, gender, payer_code"
@@ -58,6 +59,15 @@ def home(request):
         data, table_field_list, filters = createPreparedStatement(cursor, request_data)
         size = len(data)
         print(size)
+        print(data)
+        idk = list(zip(*data))
+        idk = idk[1:]
+
+        print(idk)
+        print("-----")
+
+        print(len(idk))
+        print()
         print(table_field_list)
         print(filters)
         chart = createPieChart()
@@ -76,4 +86,5 @@ def home(request):
 def add(request):
     data = request.POST or None
     print(data)
+    cursor = connection.cursor()
     return render(request, 'add.html')

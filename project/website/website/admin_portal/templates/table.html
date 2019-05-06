@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../static/main.js"></script>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/dashboard/">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600" rel="stylesheet">
+    <link href = "../static/style.css" rel = "stylesheet" type = "text/css" >
+    <link href = "../static/dashboard.css" rel = "stylesheet" type = "text/css">
+
+    <title>Admin Portal</title>
+  </head>
+
+    <body id="bootstrap-override">
+    {% if patient_data %}
+      {{ patient_data }}
+    {% endif %}
+    <br>
+        {% if filters %}
+          Filters used:
+            <p>
+              |
+              {% for filter in filters %}
+                <i>{{ filter }}</i> |
+              {% endfor %}
+            </p>
+            <p>{{ size }} rows<p>
+        {% endif %}
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <!--  jquery stuff needs to be able to change this -->
+              {% if data %}
+                <thead>
+                  <tr>
+                    {% for table_field in table_fields %}
+                      <th>{{ table_field }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in data %}
+                  <tr class="row-data" onclick="showData(this.closest('tr'))">
+                    {% for value in row %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              {% else %}
+                No patients match your search query. Please try again.
+              {% endif %}
+            </table>
+          </div>
+    <form method="post" id="patient-form"><input name="select-patient" id="patient-id" type="hidden" value="Default">{% csrf_token %}</form>
+    <script>
+      function showData(row){
+        var patient_id = row.getElementsByTagName('td')[0].innerText;
+        document.getElementById("patient-id").value = patient_id;
+        console.log(document.getElementById("patient-id").value);
+        form = document.getElementById("patient-form");
+        form.submit();
+        var ps = "SELECT * FROM Patient, Has, Encounter WHERE Patient.patient_id = Has.patient_id AND Has.encounter_id = Encounter.encounter_id AND Patient.patient_id = " + patient_id + ";";
+        console.log(ps);
+      };
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="../static/dashboard.js"></script>
+  </body>
+</html>

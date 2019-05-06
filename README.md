@@ -8,10 +8,10 @@ Contains milestone write ups and other related documents that were turned in.
 ### **/project**
 Where all the code exists!
 
-#### */project/src*
+#### **/project/src**
 Contains the scheme.sql file and AdminPortal directory used for MySQL/JDBC driver.
 
-#### */project/website/website*
+#### **/project/website/website**
 
 ## Set up
 ##### Data insertion

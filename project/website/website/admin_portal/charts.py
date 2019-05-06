@@ -5,9 +5,23 @@ class PieChart():
         self.chart = pygal.Pie(**kwargs)
         self.chart.title = title
 
-    def generate(self):
+    def generate(self, data):
         # Add data to chart
-        chart_data = {'apples': 9, 'oranges': 21, 'pears': 50}
+        chart_data = data
+        for key, value in chart_data.items():
+            self.chart.add(key, value)
+
+        # Return the rendered SVG
+        return self.chart.render(is_unicode=True)
+
+class HorizontalBarGraph():
+    def __init__(self, title, **kwargs):
+        self.chart = pygal.HorizontalBar(**kwargs)
+        self.chart.title = title
+
+    def generate(self, data):
+        # Add data to chart
+        chart_data = data
         for key, value in chart_data.items():
             self.chart.add(key, value)
 

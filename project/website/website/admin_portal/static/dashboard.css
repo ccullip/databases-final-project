@@ -128,11 +128,20 @@ body {
   padding: 0;
   margin: 0;
 }
+.all-filters {
+  width: 100%;
+}
 
 .filter {
   float: left;
   padding: 10px;
 }
+.filter-test {
+  float: right;
+  padding: 20px;
+  padding-right: 5px;
+}
+
 
 #bootstrap-override .row-data:hover{
     background-color: darkgrey;

@@ -2,15 +2,15 @@ from . import constants
 from .charts import PieChart
 from pygal.style import DarkStyle
 
-def createPieChart():
+def createPieChart(data):
     print("hello")
     chart = PieChart(
             'chart test title',
-            height=400,
-            width=400,
+            height=300,
+            width=300,
             explicit_size=True
         )
-    return chart.generate()
+    return chart.generate(data)
 
 def createPreparedStatement(cursor, request_data):
     field_list = ['Patient Id', 'Race', 'Gender', 'Age']
@@ -42,7 +42,6 @@ def createPreparedStatement(cursor, request_data):
             where_ps += "Encounter.age = '" + value + "'"
         elif key == "Medication":
             field_list.append('Medication')
-            joins["Encounter"] = True
             joins["Medication"] = True
             # add to select statement
             select_ps += ", Medication.med_name"
@@ -52,7 +51,6 @@ def createPreparedStatement(cursor, request_data):
             where_ps += "Medication.med_name = '" + value + "'"
         elif key == "a1c_result":
             field_list.append("A1c Result")
-            joins["Encounter"] = True
             joins["Vitals"] = True
             # add to select statement
             select_ps += ", Vitals.a1c_result"
@@ -62,7 +60,6 @@ def createPreparedStatement(cursor, request_data):
             where_ps += "Vitals.a1c_result = '" + value + "'"
         elif key == "glucose_result":
             field_list.append("Glucose Result")
-            joins["Encounter"] = True
             joins["Vitals"] = True
             # add to select statement
             select_ps += ", Vitals.glucose_result"
@@ -72,7 +69,6 @@ def createPreparedStatement(cursor, request_data):
             where_ps += "Vitals.glucose_result = '" + value + "'"
         elif key == "source_id":
             field_list.append("Admission Source")
-            joins["Encounter"] = True
             joins["Source"] = True
             # add to select statement
             select_ps += ", Source.source_name"
@@ -82,7 +78,6 @@ def createPreparedStatement(cursor, request_data):
             where_ps += "Source.source_id = '" + value + "'"
         elif key == "discharge_id":
             field_list.append("Discharge Destination")
-            joins["Encounter"] = True
             joins["Discharge"] = True
             # add to select statement
             select_ps += ", Discharge.discharge_name"

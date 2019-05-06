@@ -76,7 +76,10 @@ def home(request):
         print()
         print(table_field_list)
         print(filters)
-        chart = createPieChart()
+        for i in range(3):
+            print(i)
+            charts.append(createPieChart({'apples': 9, 'oranges': 21, 'pears': 50}))
+        chart = createPieChart({'apples': 9, 'oranges': 21, 'pears': 50})
         # print(data)
     else:
         ps = "SELECT * FROM Patient WHERE Patient.payer_code != '?' LIMIT 50;"

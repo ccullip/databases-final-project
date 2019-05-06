@@ -15,7 +15,7 @@ Contains the scheme.sql file and AdminPortal directory used for MySQL/JDBC drive
 
 ## Set up
 ##### Data insertion
-- Run src/schema.sql in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.
+- Run [src/schema.sql](databases-final-project/tree/master/src/schema.sq) in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.
 
 - Ensure your MySQL's settings has the **only_full_group_by** turned off.
 

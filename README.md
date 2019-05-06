@@ -1,5 +1,5 @@
 ﻿COMP 373 – Final Project
-*A admin portal webpage for doctors viewing diabetic patients' records*
+*A admin portal web app for doctors viewing diabetic patients' records*
 
 ## Set up
 #### Data insertion
@@ -48,7 +48,7 @@ Then you should be ready to deploy our website! :)
   ```
 
   - Quit the server whenever with ^C **(CONTROL - C)**
-  
+
   - To close the virtual environment:
 
   ```

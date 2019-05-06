@@ -10,5 +10,6 @@
 .DS_Store
 */.DS_Store
 
+src/AdminPortal/.idea/*
 */.idea/*
 */target/*

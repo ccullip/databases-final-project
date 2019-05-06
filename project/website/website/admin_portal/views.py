@@ -34,6 +34,7 @@ def home(request):
     filters = []
     chart = None
     charts = []
+    patient_charts = []
 
     if data and 'select-patient' in data:
         print('entered')
@@ -46,23 +47,28 @@ def home(request):
         ps = "SELECT " + patient_cols + " FROM Patient WHERE Patient.patient_id = " + patient_id + ";"
         cursor.execute(ps)
         patient_data = cursor.fetchall()
+        # print("--------------------")
+        # print("printing patient's data")
+        # print(encounter_data)
+        # print(patient_data)
+        # print("--------------------")
     if request_data is not None and len(request_data) > 1:
-        print("hello!")
-        print("--------------------")
-        print(request_data)
         keys = list(request_data.keys())
         keys.remove(constants.token_name)
+        print()
+        print("--------------------")
+        print(request_data)
         print(keys)
         print()
-        # print(list(request_data.keys()).remove(constants.token_name))
         print("--------------------")
+        print()
         data, table_field_list, filters = createPreparedStatement(cursor, request_data)
         size = len(data)
+        print("-----")
         print(size)
         print(data)
         idk = list(zip(*data))
         idk = idk[1:]
-
         print(idk)
         print("-----")
 
@@ -79,8 +85,10 @@ def home(request):
         size = len(data)
         table_field_list = ['patient_id', 'race', 'gender', 'payer_id']
     return render(request, 'home.html',
-                  {'data': data, 'table_fields': table_field_list, "size": size, 'patient_data': patient_data, 'encounter_data': encounter_data,
-                   'encounter_fields': encounter_fields, "filters": filters, "chart": chart})
+                  {'data': data, 'table_fields': table_field_list, "size": size,
+                  'patient_data': patient_data, 'encounter_data': encounter_data,
+                  'encounter_fields': encounter_fields, "filters": filters,
+                  "chart": chart, "charts": charts, "patient_charts": patient_charts})
 
 
 def add(request):

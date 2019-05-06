@@ -13,41 +13,34 @@ def createPieChart():
     return chart.generate()
 
 def createPreparedStatement(cursor, request_data):
-    field_list = ['Patient Id', 'Race', 'Gender']
+    field_list = ['Patient Id', 'Race', 'Gender', 'Age']
     keys = request_data.keys()
     values = []
-    select_ps = "SELECT Patient.patient_id, Patient.race, Patient.gender"
+    select_ps = "SELECT Patient.patient_id, Patient.race, Patient.gender, Encounter.age"
     from_ps = "FROM Patient"
     where_ps = "WHERE "
-    joins = {"Encounter": False,
+    joins = {"Encounter": True,
              "Medication": False,
              "Vitals": False,
              "Source": False,
              "Discharge": False}
     for key in keys:
+        value = request_data.get(key)
         if key != "csrfmiddlewaretoken":
-            values.append(request_data.get(key))
+            values.append(value)
 
         if key == "Gender":
-            value = request_data.get(key)
             where_ps += "Patient.gender = '" + value + "'"
         elif key == "Race":
-            value = request_data.get(key)
             if where_ps != "WHERE ":
                 where_ps += " AND "
             where_ps += "Patient.race = '" + value + "'"
         elif key == "Age":
-            value = request_data.get(key)
-            field_list.append('Age')
-            joins["Encounter"] = True
-            # add to select statement
-            select_ps += ", Encounter.age"
             # add to where statement
             if where_ps != "WHERE ":
                 where_ps += " AND "
             where_ps += "Encounter.age = '" + value + "'"
         elif key == "Medication":
-            value = request_data.get(key)
             field_list.append('Medication')
             joins["Encounter"] = True
             joins["Medication"] = True
@@ -58,7 +51,6 @@ def createPreparedStatement(cursor, request_data):
                 where_ps += " AND "
             where_ps += "Medication.med_name = '" + value + "'"
         elif key == "a1c_result":
-            value = request_data.get(key)
             field_list.append("A1c Result")
             joins["Encounter"] = True
             joins["Vitals"] = True
@@ -69,7 +61,6 @@ def createPreparedStatement(cursor, request_data):
                 where_ps += " AND "
             where_ps += "Vitals.a1c_result = '" + value + "'"
         elif key == "glucose_result":
-            value = request_data.get(key)
             field_list.append("Glucose Result")
             joins["Encounter"] = True
             joins["Vitals"] = True
@@ -80,7 +71,6 @@ def createPreparedStatement(cursor, request_data):
                 where_ps += " AND "
             where_ps += "Vitals.glucose_result = '" + value + "'"
         elif key == "source_id":
-            value = request_data.get(key)
             field_list.append("Admission Source")
             joins["Encounter"] = True
             joins["Source"] = True
@@ -91,7 +81,6 @@ def createPreparedStatement(cursor, request_data):
                 where_ps += " AND "
             where_ps += "Source.source_id = '" + value + "'"
         elif key == "discharge_id":
-            value = request_data.get(key)
             field_list.append("Discharge Destination")
             joins["Encounter"] = True
             joins["Discharge"] = True

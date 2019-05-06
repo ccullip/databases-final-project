@@ -4,12 +4,16 @@
 ## Set up
 #### Data insertion
 - Run src/schema.sql in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.
+
 - Open src/AdminPortal in IntelliJ or Eclipse and run the project to insert the data.
+
   - Insert.java takes in 2 program parameters, your **MySQL password** and **MySQL username**. Passing in your username is optional if you're using "root" as your username.
+
   - Run Insert.java to add data to database (Warning, this may take a while!)
 
 #### Django Environment
 - Django requires a virtual environment to run itself locally.
+
 - First navigate to webapp folder.
 
 ```
@@ -34,7 +38,9 @@ $   env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" 
 Then you should be ready to deploy our website! :)
 ## Deploying Web App
 - After completing the set up above, deploying is easy:
+
   - Navigate to webapp/ directory.
+
   - Run server (default port is 8000)
 
   ```
@@ -42,6 +48,7 @@ Then you should be ready to deploy our website! :)
   ```
 
   - Quit the server whenever with ^C **(CONTROL - C)**
+  
   - To close the virtual environment:
 
   ```

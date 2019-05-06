@@ -32,6 +32,7 @@ $   . env/bin/activate    # activate/enter virtual environment
 ```
 $   pip3 install django
 $   pip install --upgrade pip   # pip will probably be out of date, so upgrade it
+$   pip install pygal
 $   env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" pip3 install mysqlclient
 ```
 

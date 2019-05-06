@@ -15,7 +15,7 @@ Contains the scheme.sql file and AdminPortal directory used for MySQL/JDBC drive
 
 ## Set up
 ##### Data insertion
-- Run [src/schema.sql](databases-final-project/tree/master/src/schema.sq) in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.
+- Run [project/src/schema.sql](project/src/schema.sql) in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.
 
 - Ensure your MySQL's settings has the **only_full_group_by** turned off.
 
@@ -23,7 +23,7 @@ Contains the scheme.sql file and AdminPortal directory used for MySQL/JDBC drive
 mysql >   SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 ```
 
-- Open src/AdminPortal in IntelliJ or Eclipse and run the project to insert the data.
+- Open [project/src/AdminPortal/](project/src/AdminPortal) in IntelliJ or Eclipse and run the project to insert the data.
 
   - Insert.java takes in 2 program parameters, your **MySQL password** and **MySQL username**. Passing in your username is optional if you're using "root" as your username.
 
@@ -38,7 +38,7 @@ mysql >   SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''
 $   cd project/website/website/
 ```
 
-- Within website/ path, create and enter your virtual environment.
+- Within [project/website/website/](project/website/website), create and enter your virtual environment.
 
 ```
 $   python3 -m venv env   # to create a virtual environment
@@ -59,7 +59,7 @@ Then you should be ready to deploy our website! :)
 ## Deploying Web App
 - After completing the set up above, deploying is easy:
 
-  - Navigate to project/website/website/ directory.
+  - Navigate to [project/website/website/](project/website/website) directory.
 
   - Run server (default port is 8000)
 

@@ -2,9 +2,19 @@
 *A admin portal web app for doctors viewing diabetic patients' records*
 
 ## Code structure overview
+### **/docs**
+Contains milestone write ups and other related documents that were turned in.
+
+### **/project**
+Where all the code exists!
+
+#### */project/src*
+Contains the scheme.sql file and AdminPortal directory used for MySQL/JDBC driver.
+
+#### */project/website/website*
 
 ## Set up
-#### Data insertion
+##### Data insertion
 - Run src/schema.sql in MySQL to initialize database (admin_portal) and the necessary tables in MySQL.
 
 - Ensure your MySQL's settings has the **only_full_group_by** turned off.

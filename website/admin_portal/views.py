@@ -4,6 +4,7 @@ from .models import Patient, Has
 from django.template import RequestContext
 from django.forms import modelformset_factory
 from .helper import *
+from .constants import *
 from django.db import connection, transaction
 # from . import FusionCharts
 
@@ -35,9 +36,7 @@ def home(request):
     if data and 'select-patient' in data:
         print('entered')
         patient_id = data.get('select-patient')
-        encounter_fields = ['Encounter ID', 'Age', 'A1c Result', 'Glucose Result', '# of lab procedures',
-                            '# of medications', 'Admission type', 'Duration (days)', 'Readmitted?',
-                            'Diagnosis 1', 'Diagnosis 2', 'Diagnosis 3', 'Medication']
+        encounter_fields = e_fields
         ps = "select encounter_id, age, a1c_result, glucose_result, num_lab_procedures, num_medications, admiss_type, duration, readmitted, " \
              "diag_1, diag_2, diag_3, " \
              "group_concat(Medicine SEPARATOR ', ') as Medicines " \
@@ -73,6 +72,8 @@ def home(request):
                   {'data': data, 'table_fields': table_field_list, "size": size, 'patient_data': patient_data, 'encounter_data': encounter_data,
                    'encounter_fields': encounter_fields, "filters": filters})
 
+
+def graph(data):
 # def graphics(request);
 #     return render(request, 'graphics.html')
 

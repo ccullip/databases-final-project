@@ -4,33 +4,34 @@ import java.sql.*;
 import java.util.*;
 
 public class Insert {
-
     private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String TIMEZONE_THING = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String DB = "admin_portal";
     private static final String DB_URL = "jdbc:mysql://localhost/" + DB + TIMEZONE_THING;
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-
-    private static final Boolean isCharlotte = false;    // change this if not Charlotte!
-
-    static Map<Integer, String> admissionTypeMap = new HashMap<>();
+    private static String USER = "root";
+    private static String PASSWORD = "";
+    private static Map<Integer, String> admissionTypeMap = new HashMap<>();
 
     public static void main(String[] args) {
 
-        Connection conn = createConnection();
-
-        // account for my weird file structure/idk why it's not finding the files unless i add ../../
-        if (isCharlotte){
-            insertBasicEntities(conn, "../../important_mappings.csv");
-            insertICDCodes(conn, "../../icd9codes.csv");
-            insertMeds(conn, "../../dataset.csv");
-            insertEntities(conn, "../../dataset.csv");
+        if(args.length < 1) {
+            System.exit(1);
         } else {
-            insertBasicEntities(conn, "important_mappings.csv");
-            insertICDCodes(conn, "icd9codes.csv");
-            insertMeds(conn, "dataset.csv");
-            insertEntities(conn, "dataset.csv");
+            PASSWORD = args[0];
+            // if you want to use a user other than root
+            if(args.length > 1) { USER = args[1]; }
+        }
+
+        Connection conn = createConnection();
+        insertBasicEntities(conn, "important_mappings.csv");
+        insertICDCodes(conn, "icd9codes.csv");
+        insertMeds(conn, "dataset.csv");
+        insertEntities(conn, "dataset.csv");
+
+        try {
+            conn.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
         }
 
     }

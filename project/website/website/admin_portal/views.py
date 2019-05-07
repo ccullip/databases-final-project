@@ -103,5 +103,12 @@ def home(request):
 def add(request):
     data = request.POST or None
     print(data)
-    cursor = connection.cursor()
-    return render(request, 'add.html')
+    successful = False
+    patient_id = None
+    if data:
+        if all(patient_attr in data for patient_attr in ['patientID', 'Gender', 'Race', 'PayerCode']) and 'patientID' != '':
+            cursor = connection.cursor()
+            patient_id = data['patientID']
+            successful = insertNewPatient(cursor, data)
+    return render(request, 'add.html',
+                  {'data':data, 'successful':successful,'patient_id': patient_id})

@@ -25,17 +25,30 @@ def createGraphic(data, key, pie=True):
 
 
 def createPreparedStatementForSpecificPatient(cursor, patient_id):
-    field_list = ['Patient Id', 'Race', 'Gender', 'Age']
+    field_list = ['Patient Id', 'Race', 'Gender']
     values = []
-    select_ps = "SELECT Patient.patient_id, Patient.race, Patient.gender, Encounter.age"
+    select_ps = "SELECT Patient.patient_id, Patient.race, Patient.gender"
     from_ps = "FROM Patient"
-    from_ps += " natural join Has natural join Encounter"
     where_ps = "WHERE Patient.patient_id = '" + patient_id + "'"
     ps = select_ps + " " + from_ps + " " + where_ps + ";"
     print(ps)
     cursor.execute(ps)
     return cursor.fetchall(), field_list, values
 
+
+def insertNewPatient(cursor, data):
+    insert_ps = "INSERT INTO Patient" + " (patient_id, race, gender, payer_code) "
+    print(data)
+    print(data['Race'])
+    new_patient_data = data['patientID'] + ", '" + data['Race'] + "', '" + data['Gender'] + "', '" + data['PayerCode'] +"'"
+
+    values = "VALUES( " + new_patient_data + " );"
+
+    ps = insert_ps + values
+    print(ps)
+    cursor.execute(ps)
+
+    return True
 
 def createPreparedStatement(cursor, request_data):
     field_list = ['Patient Id', 'Race', 'Gender', 'Age']

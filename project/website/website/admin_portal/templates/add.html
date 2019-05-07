@@ -136,7 +136,7 @@
                 <option value="WC">WC</option>
               </select>
             </div>
-            <div class="filter">
+            <!-- <div class="filter">
               <p class="filter-title">Age Range</p>
               <select name="Age" form="add-form">
                 <option value="" disabled selected>Select...</option>
@@ -434,11 +434,23 @@
               <input class="medbtn" name="Metformin-Pioglitazone" type="radio" value="Steady" form="add-form">
               <input class="medbtn" name="Metformin-Pioglitazone" type="radio" value="Down" form="add-form">
               </div>
-            </div>
-            <div>
+            </div> -->
+            <div class = "d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 filter-test">
               <form method="post" id="add-form"><input class = "btn btn-outline-secondary" type="submit" value="Add">
               {% csrf_token %}
               </form>
+            </div>
+            <br>
+            <br>
+            <br>
+            <div>&nbsp;&nbsp;
+              {% if data %}
+                {% if successful %}
+                  <p>Patient #{{patient_id}} was successfully added to the database.</p>
+                  {% else %}
+                  <p>Patient creation was not successful, please fill out all the parameters.</p>
+                {% endif %}
+                {% endif %}
             </div>
             </div>
           </div>

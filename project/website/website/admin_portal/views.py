@@ -85,12 +85,13 @@ def home(request):
                 print(value)
                 if value:
                     datum = list(zipped_data[value])
-                    charts.append(createGraphic(datum, title, pie))
-        ps = "SELECT * FROM Patient WHERE Patient.payer_code != '?' LIMIT 50;"
-        cursor.execute(ps)
-        data = cursor.fetchall()
-        size = len(data)
-        table_field_list = ['patient_id', 'race', 'gender', 'payer_id']
+                    if len(datum) > 1:
+                        charts.append(createGraphic(datum, title, pie))
+        # ps = "SELECT * FROM Patient WHERE Patient.payer_code != '?' LIMIT 50;"
+        # cursor.execute(ps)
+        # data = cursor.fetchall()
+        # size = len(data)
+        # table_field_list = ['patient_id', 'race', 'gender', 'payer_id']
 
     return render(request, 'home.html',
                   {'data': data, 'table_fields': table_field_list, "size": size,

@@ -89,7 +89,7 @@ Then you should be ready to deploy our website! :)
   ```
   $   deactivate
   ```
-  
+
 ## Features
 - Filter on through the patients' data with the different inputs on the page.
 
@@ -98,6 +98,7 @@ Then you should be ready to deploy our website! :)
 - Look at pie charts/bar graphs analyzing data with the specific filters you used.
 
 - Search for specific patients used the search bar by entering in their patient id number
- 
+
   - *limitation!!* you must use the button "**Search for Patient**", rather than pressing enter, or else the query will not work properly. <br>
+
 *Created by Charlotte Cullip and Stephanie Angulo.*

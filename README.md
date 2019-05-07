@@ -99,5 +99,5 @@ Then you should be ready to deploy our website! :)
 
 - Search for specific patients used the search bar by entering in their patient id number
  
-  - *limitation!!* you must use the button *Search for Patient*, rather than pressing enter, or else the query will not work properly.
+  - *limitation!!* you must use the button "**Search for Patient**", rather than pressing enter, or else the query will not work properly. <br>
 *Created by Charlotte Cullip and Stephanie Angulo.*

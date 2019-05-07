@@ -97,7 +97,10 @@ Then you should be ready to deploy our website! :)
 
 - Look at pie charts/bar graphs analyzing data with the specific filters you used.
 
+- Add new patients to the database.
+
 - Search for specific patients used the search bar by entering in their patient id number
+
 
   - *limitation!!* you must use the button "**Search for Patient**", rather than pressing enter, or else the query will not work properly. <br>
 

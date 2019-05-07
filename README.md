@@ -80,6 +80,7 @@ Then you should be ready to deploy our website! :)
   ```
   $   python3 manage.py runserver <optional port number>
   ```
+- Navigate to [127.0.0.1:8000/home/](http://127.0.0.1:8000/home/) and play around with the different features!
 
   - Quit the server whenever with ^C **(CONTROL - C)**
 
@@ -88,5 +89,15 @@ Then you should be ready to deploy our website! :)
   ```
   $   deactivate
   ```
+  
+## Features
+- Filter on through the patients' data with the different inputs on the page.
 
+- Click on specific rows to get more information on the patient
+
+- Look at pie charts/bar graphs analyzing data with the specific filters you used.
+
+- Search for specific patients used the search bar by entering in their patient id number
+ 
+  - *limitation!!* you must use the button *Search for Patient*, rather than pressing enter, or else the query will not work properly.
 *Created by Charlotte Cullip and Stephanie Angulo.*

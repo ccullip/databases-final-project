@@ -57,7 +57,8 @@ def home(request):
 
     if data and len(data) == 1:
         data = None
-
+    elif data and len(data) == 2 and 'graphtype' in data and 'csrfmiddlewaretoken' in data:
+        data = None
     if data and 'select-specific-patient' in data:
         print("line 60 ??????????")
         print(data)

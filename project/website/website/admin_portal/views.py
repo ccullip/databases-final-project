@@ -35,6 +35,7 @@ def home(request):
     chart = None
     charts = []
     patient_charts = []
+    pie = True
 
     if data and 'select-patient' in data:
         print('entered')
@@ -52,7 +53,9 @@ def home(request):
         # print(encounter_data)
         # print(patient_data)
         # print("--------------------")
-    if request_data is not None and len(request_data) > 1:
+    if request_data is not None and len(request_data) > 2:
+        if(request_data['graphtype'] != 'pie'):
+            pie = False
         keys = list(request_data.keys())
         keys.remove(constants.token_name)
         print()
@@ -66,10 +69,10 @@ def home(request):
         size = len(data)
         print("-----")
         print(size)
-        print(data)
+        # print(data)
         idk = list(zip(*data))
         idk = idk[1:]
-        print(idk)
+        # print(idk)
         print("-----")
 
         print(len(idk))
@@ -78,8 +81,8 @@ def home(request):
         print(filters)
         for i in range(3):
             print(i)
-            charts.append(createPieChart({'apples': 9, 'oranges': 21, 'pears': 50}))
-        chart = createPieChart({'apples': 9, 'oranges': 21, 'pears': 50})
+            charts.append(createGraphic({'apples': 9, 'oranges': 21, 'pears': 50}, pie))
+        #chart = createPieChart({'apples': 9, 'oranges': 21, 'pears': 50})
         # print(data)
     else:
         ps = "SELECT * FROM Patient WHERE Patient.payer_code != '?' LIMIT 50;"

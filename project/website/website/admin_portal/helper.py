@@ -1,15 +1,25 @@
 from . import constants
 from .charts import PieChart
+from .charts import HorizontalBarGraph
 from pygal.style import DarkStyle
 
-def createPieChart(data):
+def createGraphic(data, pie=True):
     print("hello")
-    chart = PieChart(
-            'chart test title',
-            height=300,
-            width=300,
-            explicit_size=True
-        )
+    chart = None
+    if pie:
+        chart = PieChart(
+                'chart test title',
+                height=300,
+                width=300,
+                explicit_size=True
+            )
+    else:
+        chart = HorizontalBarGraph(
+                'chart test title',
+                height=300,
+                width=300,
+                explicit_size=True
+            )
     return chart.generate(data)
 
 def createPreparedStatement(cursor, request_data):

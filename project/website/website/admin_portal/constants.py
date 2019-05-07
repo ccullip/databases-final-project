@@ -1,5 +1,8 @@
 token_name = "csrfmiddlewaretoken"
+graph_key = "graphtype"
 
+titles_options = ['Race', 'Gender', 'Age']
+titles_dict = dict(zip(titles_options, [1,2,3]))
 race_options = ['?','AfricanAmerican','Asian','Caucasian','Hispanic','Other']
 gender_options = ['Male','Female','Other']
 age_options = ['[0-10)','[10-20)','[20-30)','[30-40)','[40-50)','[50-60)','[60-70)','[70-80)','[80-90)','[90-100)']
@@ -8,6 +11,7 @@ encounter_fields = ['Encounter ID', 'Age', 'A1c Result', 'Glucose Result', '# of
                     '# of medications', 'Admission type', 'Duration (days)', 'Readmitted?',
                     'Diagnosis 1', 'Diagnosis 2', 'Diagnosis 3', 'Medication']
 
+options_dict = {"Gender" : gender_options, "Race" : race_options, "Age": age_options}
 pie_graphs = ["Gender", "Race", "Age"]
 
 def createGiantPreparedStatement(patient_id):

@@ -332,14 +332,15 @@
                       <h5>Data analysis from these filters</h5>
 
                         {% for chart in charts %}
-                          {{ chart |safe }}
+                          {{ chart |safe }} &nbsp;&nbsp;&nbsp;&nbsp;
                         {% endfor %}
                         <br>
                       {% endif %}
 
                 {% endif %}
                </div>
-          <form method="post" id="patient-form"><input name="select-patient" id="patient-id" type="hidden" value="Default">{% csrf_token %}</form>
+          <!-- <form method="post" id="patient-form">
+            <input name="select-patient" id="patient-id" type="hidden" value="Default">{% csrf_token %}</form> -->
 
          </div>
         </main>
@@ -347,7 +348,8 @@
     </div>
     <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script src="../static/dashboard.js"></script>

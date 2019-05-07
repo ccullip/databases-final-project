@@ -58,6 +58,10 @@ def home(request):
             pie = False
         keys = list(request_data.keys())
         keys.remove(constants.token_name)
+        keys.remove(constants.graph_key)
+
+        titles = list(set(constants.titles_options) - set(keys))
+
         print()
         print("--------------------")
         print(request_data)
@@ -71,7 +75,7 @@ def home(request):
         print(size)
         # print(data)
         idk = list(zip(*data))
-        idk = idk[1:]
+        # gender, race, age --> 1, 2, 3
         # print(idk)
         print("-----")
 
@@ -79,11 +83,26 @@ def home(request):
         print()
         print(table_field_list)
         print(filters)
-        for i in range(3):
-            print(i)
-            charts.append(createGraphic({'apples': 9, 'oranges': 21, 'pears': 50}, pie))
-        #chart = createPieChart({'apples': 9, 'oranges': 21, 'pears': 50})
-        # print(data)
+
+        print("charts that should be made --->")
+        print(titles)
+        for title in titles:
+            print("HI THERE in for loop")
+            print(title)
+            value = constants.titles_dict[title]
+            print(value)
+            datum = list(idk[value])
+
+            charts.append(createGraphic(datum, title, pie))
+            print(datum)
+            print("------")
+        # for i in range(idk):
+        #     print(i)
+
+
+        # for i in range(3):
+        #     print(i)
+        #     charts.append(createGraphic({'apples': 9, 'oranges': 21, 'pears': 50}, "key", pie))
     else:
         ps = "SELECT * FROM Patient WHERE Patient.payer_code != '?' LIMIT 50;"
         cursor.execute(ps)

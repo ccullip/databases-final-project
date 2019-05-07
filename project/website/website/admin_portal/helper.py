@@ -3,24 +3,24 @@ from .charts import PieChart
 from .charts import HorizontalBarGraph
 from pygal.style import DarkStyle
 
-def createGraphic(data, pie=True):
+def createGraphic(data, key, pie=True):
     print("hello")
     chart = None
     if pie:
         chart = PieChart(
-                'chart test title',
-                height=300,
-                width=300,
+                key + " chart",
+                height=450,
+                width=550,
                 explicit_size=True
             )
     else:
         chart = HorizontalBarGraph(
-                'chart test title',
-                height=300,
-                width=300,
+                key + " graph",
+                height=450,
+                width=550,
                 explicit_size=True
             )
-    return chart.generate(data)
+    return chart.generate(data, key)
 
 def createPreparedStatement(cursor, request_data):
     field_list = ['Patient Id', 'Race', 'Gender', 'Age']

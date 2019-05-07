@@ -3,24 +3,39 @@ from .charts import PieChart
 from .charts import HorizontalBarGraph
 from pygal.style import DarkStyle
 
+TITLE = "Patients' "
 def createGraphic(data, key, pie=True):
     print("hello")
     chart = None
     if pie:
         chart = PieChart(
-                key + " chart",
+                TITLE + key + "s",
                 height=450,
                 width=550,
                 explicit_size=True
             )
     else:
         chart = HorizontalBarGraph(
-                key + " graph",
+                TITLE + key + "s",
                 height=450,
                 width=550,
                 explicit_size=True
             )
     return chart.generate(data, key)
+
+
+def createPreparedStatementForSpecificPatient(cursor, patient_id):
+    field_list = ['Patient Id', 'Race', 'Gender', 'Age']
+    values = []
+    select_ps = "SELECT Patient.patient_id, Patient.race, Patient.gender, Encounter.age"
+    from_ps = "FROM Patient"
+    from_ps += " natural join Has natural join Encounter"
+    where_ps = "WHERE Patient.patient_id = '" + patient_id + "'"
+    ps = select_ps + " " + from_ps + " " + where_ps + ";"
+    print(ps)
+    cursor.execute(ps)
+    return cursor.fetchall(), field_list, values
+
 
 def createPreparedStatement(cursor, request_data):
     field_list = ['Patient Id', 'Race', 'Gender', 'Age']

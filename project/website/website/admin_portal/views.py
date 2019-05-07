@@ -17,9 +17,14 @@ def index(request):
 
 def home(request):
     data = request.POST or None
-    if data and 'select-patient' not in data:
+    print(data)
+    if data and 'select-patient' not in data and 'select-specific-patient' not in data:
         request.session['data'] = data
-        print(data)
+        print("select-specific-patient is not in the data")
+        print("select-patient is not in the data")
+    else:
+        if data and 'select-specific-patient' in data and data['select-specific-patient'] == ['Default']:
+            data = None
 
     if 'data' in request.session.keys():
         request_data = request.session.get('data')
@@ -34,6 +39,7 @@ def home(request):
     filters = []
     chart = None
     charts = []
+    table_field_list = None
     patient_charts = []
     pie = True
 
@@ -48,67 +54,44 @@ def home(request):
         ps = "SELECT " + patient_cols + " FROM Patient WHERE Patient.patient_id = " + patient_id + ";"
         cursor.execute(ps)
         patient_data = cursor.fetchall()
-        # print("--------------------")
-        # print("printing patient's data")
-        # print(encounter_data)
-        # print(patient_data)
-        # print("--------------------")
-    if request_data is not None and len(request_data) > 2:
+
+    if data and len(data) == 1:
+        data = None
+
+    if data and 'select-specific-patient' in data:
+        print("line 60 ??????????")
+        print(data)
+        patient_id = data.get('select-specific-patient')
+        data, table_field_list, filters = createPreparedStatementForSpecificPatient(cursor, patient_id)
+        print(patient_id)
+    elif request_data is not None and len(request_data) > 2:
         if(request_data['graphtype'] != 'pie'):
             pie = False
+        print("line 66")
+        print("hello?")
+        print(request_data)
         keys = list(request_data.keys())
         keys.remove(constants.token_name)
         keys.remove(constants.graph_key)
 
         titles = list(set(constants.titles_options) - set(keys))
 
-        print()
-        print("--------------------")
-        print(request_data)
-        print(keys)
-        print()
-        print("--------------------")
-        print()
         data, table_field_list, filters = createPreparedStatement(cursor, request_data)
         size = len(data)
-        print("-----")
-        print(size)
-        # print(data)
-        idk = list(zip(*data))
-        # gender, race, age --> 1, 2, 3
-        # print(idk)
-        print("-----")
-
-        print(len(idk))
-        print()
-        print(table_field_list)
-        print(filters)
-
-        print("charts that should be made --->")
-        print(titles)
-        for title in titles:
-            print("HI THERE in for loop")
-            print(title)
-            value = constants.titles_dict[title]
-            print(value)
-            datum = list(idk[value])
-
-            charts.append(createGraphic(datum, title, pie))
-            print(datum)
-            print("------")
-        # for i in range(idk):
-        #     print(i)
-
-
-        # for i in range(3):
-        #     print(i)
-        #     charts.append(createGraphic({'apples': 9, 'oranges': 21, 'pears': 50}, "key", pie))
-    else:
+        zipped_data = list(zip(*data))
+        if zipped_data:
+            for title in titles:
+                value = constants.titles_dict[title]
+                print(value)
+                if value:
+                    datum = list(zipped_data[value])
+                    charts.append(createGraphic(datum, title, pie))
         ps = "SELECT * FROM Patient WHERE Patient.payer_code != '?' LIMIT 50;"
         cursor.execute(ps)
         data = cursor.fetchall()
         size = len(data)
         table_field_list = ['patient_id', 'race', 'gender', 'payer_id']
+
     return render(request, 'home.html',
                   {'data': data, 'table_fields': table_field_list, "size": size,
                   'patient_data': patient_data, 'encounter_data': encounter_data,
